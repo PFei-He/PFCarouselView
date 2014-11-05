@@ -245,28 +245,28 @@ typedef void (^tapBlock)(PFCarouselView *, NSInteger);
     [contentViews removeAllObjects];
 
     //添加内容页
-    if (!self.delegate && self.contentViewBlock) {//监听块并回调
-        [contentViews addObject:self.contentViewBlock(self, previousPageIndex)];
-        [contentViews addObject:self.contentViewBlock(self, currentPageIndex)];
-        [contentViews addObject:self.contentViewBlock(self, nextPageIndex)];
-    } else if ([self.delegate respondsToSelector:@selector(carouselView:contentViewAtIndex:)]) {//监听代理并回调
+    if ([self.delegate respondsToSelector:@selector(carouselView:contentViewAtIndex:)]) {//监听代理并回调
         [contentViews addObject:[self.delegate carouselView:self contentViewAtIndex:previousPageIndex]];
         [contentViews addObject:[self.delegate carouselView:self contentViewAtIndex:currentPageIndex]];
         [contentViews addObject:[self.delegate carouselView:self contentViewAtIndex:nextPageIndex]];
+    } else if (self.contentViewBlock) {//监听块并回调
+        [contentViews addObject:self.contentViewBlock(self, previousPageIndex)];
+        [contentViews addObject:self.contentViewBlock(self, currentPageIndex)];
+        [contentViews addObject:self.contentViewBlock(self, nextPageIndex)];
     }
 
     //设置页控制器（白点）
-    if (!self.delegate && self.pageControlBlock) {//监听块并回调
-        self.pageControlBlock(self, self.pageControl, currentPageIndex);
-    } else if ([self.delegate respondsToSelector:@selector(carouselView:pageControl:atIndex:)]) {//监听代理并回调
+    if ([self.delegate respondsToSelector:@selector(carouselView:pageControl:atIndex:)]) {//监听代理并回调
         [self.delegate carouselView:self pageControl:self.pageControl atIndex:currentPageIndex];
+    } else if (self.pageControlBlock) {//监听块并回调
+        self.pageControlBlock(self, self.pageControl, currentPageIndex);
     }
 
     //设置文本
-    if (!self.delegate && self.textLabelBlock) {//监听块并回调
-        self.textLabelBlock(self, self.textLabel, currentPageIndex);
-    } else if ([self.delegate respondsToSelector:@selector(carouselView:textLabel:atIndex:)]) {//监听代理并回调
+    if ([self.delegate respondsToSelector:@selector(carouselView:textLabel:atIndex:)]) {//监听代理并回调
         [self.delegate carouselView:self textLabel:self.textLabel atIndex:currentPageIndex];
+    } else if (self.textLabelBlock) {//监听块并回调
+        self.textLabelBlock(self, self.textLabel, currentPageIndex);
     }
 }
 
@@ -341,10 +341,10 @@ typedef void (^tapBlock)(PFCarouselView *, NSInteger);
 //内容页被点击
 - (void)contentViewDidTap:(UITapGestureRecognizer *)recognizer
 {
-    if (!self.delegate && self.tapBlock) {//监听块并回调
-        self.tapBlock(self, currentPageIndex);
-    } else if ([self.delegate respondsToSelector:@selector(carouselView:didSelectViewAtIndex:)]) {//监听代理并回调
+    if ([self.delegate respondsToSelector:@selector(carouselView:didSelectViewAtIndex:)]) {//监听代理并回调
         [self.delegate carouselView:self didSelectViewAtIndex:currentPageIndex];
+    } else if (self.tapBlock) {//监听块并回调
+        self.tapBlock(self, currentPageIndex);
     }
 }
 
@@ -387,6 +387,22 @@ typedef void (^tapBlock)(PFCarouselView *, NSInteger);
 
     //设置页控制器（白点）为当前页
     self.pageControl.currentPage = currentPageIndex;
+}
+
+#pragma mark - Memory Management
+
+- (void)dealloc
+{
+#if __has_feature(objc_arc)
+    self.numberOfPagesBlock = nil;
+    self.contentViewBlock = nil;
+    self.pageControlBlock = nil;
+    self.textLabelBlock = nil;
+    self.tapBlock = nil;
+
+    self.delegate = nil;
+#else
+#endif
 }
 
 /*
