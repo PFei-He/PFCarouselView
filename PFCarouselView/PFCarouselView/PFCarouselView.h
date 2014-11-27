@@ -52,32 +52,43 @@
 @interface PFCarouselView : UIView
 
 ///是否显示页控制器（白点），默认为显示
-@property (nonatomic, assign)   BOOL                        pageControlShow;
+@property (nonatomic, assign)               BOOL            pageControlShow;
 
 ///页控制器（白点）
-@property (nonatomic, strong)   UIPageControl               *pageControl;
-
-///页控制器（白点）的坐标
-@property (nonatomic, assign)   CGPoint                     pageControlPoint;
+@property (nonatomic, strong, readonly)     UIPageControl   *pageControl;
 
 ///是否显示文本，默认为显示
-@property (nonatomic, assign)   BOOL                        textLabelShow;
+@property (nonatomic, assign)               BOOL            textLabelShow;
 
 ///文本
-@property (nonatomic, strong)   UILabel                     *textLabel;
+@property (nonatomic, strong, readonly)     UILabel         *textLabel;
 
-///文本的尺寸
-@property (nonatomic, assign)   CGRect                      textLabelFrame;
-
-///代理
-@property (nonatomic, weak)     id<PFCarouselViewDelegate>  delegate;
+///内容视图
+@property (nonatomic, strong)               NSArray         *contentViews;
 
 /**
  *  初始化滚动视图
  *  @param animationDuration: 自动滚动的间隔时长。如果<=0，不自动滚动
- *  @param delegate: 代理（使用块方法时设为nil）
+ *  @param delegate: 代理（不使用代理方法时设为nil）
  */
 - (id)initWithFrame:(CGRect)frame animationDuration:(NSTimeInterval)animationDuration delegate:(id<PFCarouselViewDelegate>)delegate;
+
+/**
+ *  @brief 停止滚动
+ */
+- (void)stop;
+
+/**
+ *  @brief 恢复滚动
+ */
+- (void)resume;
+
+/**
+ *  @brief 刷新
+ */
+- (void)refresh;
+
+#pragma mark -
 
 /**
  *  @brief 滚动视图的总页数（使用块方法时必须执行该方法）

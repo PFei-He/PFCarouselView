@@ -80,30 +80,36 @@ typedef void (^tapBlock)(PFCarouselView *, NSInteger);
 {
     NSInteger       currentPageIndex;   //当前页的序号
     NSInteger       pagesCount;         //总页数
-    NSMutableArray  *contentViews;      //内容视图
+    NSMutableArray  *allContentViews;   //内容视图
     NSTimer         *animationTimer;    //动画计时器
+
+    CGPoint         pageControlCenter;  //页控制器坐标
+    CGRect          textLabelFrame;     //文本尺寸
 }
 
 ///滚动视图
-@property (nonatomic, strong)   UIScrollView            *scrollView;
+@property (nonatomic, strong)   UIScrollView                *scrollView;
 
 ///时间间隔
-@property (nonatomic, assign)   NSTimeInterval          animationDuration;
+@property (nonatomic, assign)   NSTimeInterval              animationDuration;
 
 ///获取页数
-@property (nonatomic, copy)     numberOfPagesBlock      numberOfPagesBlock;
+@property (nonatomic, copy)     numberOfPagesBlock          numberOfPagesBlock;
 
 ///内容视图
-@property (nonatomic, copy)     contentViewBlock        contentViewBlock;
+@property (nonatomic, copy)     contentViewBlock            contentViewBlock;
 
 ///页控制器（白点）
-@property (nonatomic, copy)     pageControlBlock        pageControlBlock;
+@property (nonatomic, copy)     pageControlBlock            pageControlBlock;
 
 ///文本
-@property (nonatomic, copy)     textLabelBlock          textLabelBlock;
+@property (nonatomic, copy)     textLabelBlock              textLabelBlock;
 
 ///点击事件
-@property (nonatomic, copy)     tapBlock                tapBlock;
+@property (nonatomic, copy)     tapBlock                    tapBlock;
+
+///代理
+@property (nonatomic, weak)     id<PFCarouselViewDelegate>  delegate;
 
 @end
 
@@ -113,48 +119,109 @@ typedef void (^tapBlock)(PFCarouselView *, NSInteger);
 {
     self = [super initWithFrame:frame];
     if (self) {
+        //代理
+        self.delegate = delegate, delegate = nil;
+
         //滚动视图
-        self.scrollView = [[UIScrollView alloc] initWithFrame:self.bounds];
-        self.scrollView.autoresizingMask = 0xFF;
-        self.scrollView.contentMode = UIViewContentModeCenter;
-        self.scrollView.contentSize = CGSizeMake(3 * CGRectGetWidth(self.scrollView.frame), CGRectGetHeight(self.scrollView.frame));
-        self.scrollView.delegate = self;
-        self.scrollView.contentOffset = CGPointMake(CGRectGetWidth(self.scrollView.frame), 0);
-        self.scrollView.pagingEnabled = YES;
-        [self addSubview:self.scrollView];
+        [self setupScrollView];
 
         //页控制器（白点）
-        self.pageControl = [[UIPageControl alloc] init];
-        self.pageControl.center = CGPointMake(self.scrollView.center.x, self.scrollView.bounds.size.height - 40);
-        self.pageControl.currentPage = 0;
-        [self addSubview:self.pageControl];
+        _pageControlShow = YES;
+        [self setupPageControlWithCurrentPage:currentPageIndex];
 
         //文本
-        self.textLabel = [[UILabel alloc] initWithFrame:CGRectMake(self.bounds.origin.x, self.bounds.size.height - 30, self.bounds.size.width, 30)];
-        self.textLabel.backgroundColor = [UIColor colorWithRed:0 green:0 blue:0 alpha:0.300];
-        self.textLabel.font = [UIFont systemFontOfSize:14];
-        self.textLabel.textColor = [UIColor whiteColor];
-        self.textLabel.textAlignment = NSTextAlignmentCenter;
-        [self addSubview:self.textLabel];
+        _textLabelShow = YES;
+        [self setupTextLabel];
 
-        /*
-         *p.s. 因为滚动视图的滚动数是从0开始，所以当前页为0，其实是第一页
-         */
-        //设置当前页为第一页
-        currentPageIndex = 0;
-    }
-
-    if (animationDuration > 0.0) {//设置计时器
-        animationTimer = [NSTimer scheduledTimerWithTimeInterval:(self.animationDuration = animationDuration) target:self selector:@selector(animationTimerDidFired:) userInfo:nil repeats:YES];
-
-        if (delegate) {//设置代理并获取页数
-            self.delegate = delegate;
-            [self setupTotalPagesCount:[self.delegate numberOfPagesInCarouselView:self]];
-        } else {//暂停计时器
-            [animationTimer pauseTimer];
-        }
+        //计时器
+        [self setupAnimationTimerWithDuration:self.animationDuration = animationDuration];
     }
     return self;
+}
+
+#pragma mark - Views Management
+
+//设置滚动视图
+- (void)setupScrollView
+{
+    //滚动视图
+    if (!_scrollView) _scrollView = [[UIScrollView alloc] initWithFrame:self.bounds];
+    _scrollView.autoresizingMask = 0xFF;
+    _scrollView.contentMode = UIViewContentModeCenter;
+    _scrollView.contentSize = CGSizeMake(3 * CGRectGetWidth(_scrollView.frame), CGRectGetHeight(_scrollView.frame));
+    _scrollView.delegate = self;
+    _scrollView.contentOffset = CGPointMake(CGRectGetWidth(_scrollView.frame), 0);
+    _scrollView.pagingEnabled = YES;
+    [self addSubview:_scrollView];
+}
+
+//设置页控制器（白点）
+- (void)setupPageControlWithCurrentPage:(NSInteger)currentPage
+{
+    //页控制器（白点）
+    if (!_pageControl) _pageControl = [[UIPageControl alloc] init];
+    pageControlCenter.x ? (_pageControl.center = pageControlCenter) : (_pageControl.center = CGPointMake(_scrollView.center.x, _scrollView.bounds.size.height - 40));
+    _pageControl.currentPage = currentPage;
+    [self addSubview:_pageControl];
+}
+
+//设置文本
+- (void)setupTextLabel
+{
+    //文本
+    if (!_textLabel) _textLabel = [[UILabel alloc] init];
+    textLabelFrame.size.height ? (_textLabel.frame = textLabelFrame) : (_textLabel.frame = CGRectMake(self.bounds.origin.x, self.bounds.size.height - 30, self.bounds.size.width, 30));
+    _textLabel.backgroundColor = [UIColor colorWithRed:0 green:0 blue:0 alpha:0.300];
+    _textLabel.font = [UIFont systemFontOfSize:14];
+    _textLabel.textColor = [UIColor whiteColor];
+    _textLabel.textAlignment = NSTextAlignmentCenter;
+    [self addSubview:_textLabel];
+}
+
+//设置计时器
+- (void)setupAnimationTimerWithDuration:(NSTimeInterval)animationDuration
+{
+    if (animationDuration > 0.0f) {//设置计时器
+        if (!animationTimer) animationTimer = [NSTimer scheduledTimerWithTimeInterval:(animationDuration) target:self selector:@selector(animationTimerDidFired:) userInfo:nil repeats:YES];
+
+        //获取页数
+        self.delegate ?//监听代理并回调
+        [self setupTotalPagesCount:[self.delegate numberOfPagesInCarouselView:self]] :
+        self.numberOfPagesBlock ?//监听块并回调
+        [self setupTotalPagesCount:self.numberOfPagesBlock(self)] :
+        _contentViews ?//数组中取值
+        [self setupTotalPagesCount:_contentViews.count] :
+        //暂停计时器
+        [animationTimer pauseTimer];
+    }
+}
+
+//设置内容页
+- (void)setupContentView
+{
+    [self.scrollView.subviews makeObjectsPerformSelector:@selector(removeFromSuperview)];
+    [self setScrollViewDataSource];
+
+    //设置一个计数器
+    NSInteger counter = 0;
+
+    //设置内容页（遍历每一页的内容）
+    for (UIView *contentView in allContentViews) {
+
+        //打开用户交互
+        contentView.userInteractionEnabled = YES;
+
+        //添加点击事件
+        UITapGestureRecognizer *recognizer = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(contentViewDidTap:)];
+        [contentView addGestureRecognizer:recognizer];
+
+        //设置内容尺寸和位移
+        CGRect rightRect = contentView.frame;
+        rightRect.origin = CGPointMake(CGRectGetWidth(self.scrollView.frame) * (counter++), 0);
+        contentView.frame = rightRect;
+        [_scrollView addSubview:contentView];
+    }
+    [_scrollView setContentOffset:CGPointMake(_scrollView.frame.size.width, 0)];
 }
 
 #pragma mark - Property Methods
@@ -163,28 +230,21 @@ typedef void (^tapBlock)(PFCarouselView *, NSInteger);
 - (void)setPageControlShow:(BOOL)pageControlShow
 {
     _pageControlShow = pageControlShow;
-    if (!pageControlShow) [self.pageControl removeFromSuperview], self.pageControl = nil;
-}
-
-//页控制器（白点）的坐标的setter方法
-- (void)setPageControlPoint:(CGPoint)pageControlPoint
-{
-    _pageControlPoint = pageControlPoint;
-    self.pageControl.center = pageControlPoint;
+    if (!pageControlShow) [_pageControl removeFromSuperview], _pageControl = nil;
 }
 
 //是否显示文本的setter方法
 - (void)setTextLabelShow:(BOOL)textLabelShow
 {
     _textLabelShow = textLabelShow;
-    if (!textLabelShow) [self.textLabel removeFromSuperview], self.textLabel = nil;
+    if (!textLabelShow) [_textLabel removeFromSuperview], _textLabel = nil;
 }
 
-//文本的尺寸的setter方法
-- (void)setTextLabelFrame:(CGRect)textLabelFrame
+//内容视图的setter方法
+- (void)setContentViews:(NSArray *)contentViews
 {
-    _textLabelFrame = textLabelFrame;
-    self.textLabel.frame = textLabelFrame;
+    _contentViews = contentViews;
+    contentViews ? [self setupTotalPagesCount:contentViews.count] : (_contentViews = nil);
 }
 
 #pragma mark - Private Methods
@@ -203,34 +263,6 @@ typedef void (^tapBlock)(PFCarouselView *, NSInteger);
     self.pageControl.numberOfPages = count;
 }
 
-//设置内容
-- (void)setupContentView
-{
-    [self.scrollView.subviews makeObjectsPerformSelector:@selector(removeFromSuperview)];
-    [self setScrollViewDataSource];
-
-    //设置一个计数器
-    NSInteger counter = 0;
-
-    //设置内容页（遍历每一页的内容）
-    for (UIView *contentView in contentViews) {
-
-        //打开用户交互
-        contentView.userInteractionEnabled = YES;
-
-        //添加点击事件
-        UITapGestureRecognizer *recognizer = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(contentViewDidTap:)];
-        [contentView addGestureRecognizer:recognizer];
-
-        //设置内容尺寸和位移
-        CGRect rightRect = contentView.frame;
-        rightRect.origin = CGPointMake(CGRectGetWidth(self.scrollView.frame) * (counter++), 0);
-        contentView.frame = rightRect;
-        [self.scrollView addSubview:contentView];
-    }
-    [_scrollView setContentOffset:CGPointMake(_scrollView.frame.size.width, 0)];
-}
-
 //设置滚动视图的数据源
 - (void)setScrollViewDataSource
 {
@@ -241,19 +273,21 @@ typedef void (^tapBlock)(PFCarouselView *, NSInteger);
     NSInteger nextPageIndex = [self getNextPageIndex:currentPageIndex + 1];
 
     //设置内容页数组
-    if (contentViews == nil) contentViews = [@[] mutableCopy];
-    [contentViews removeAllObjects];
+    if (allContentViews == nil) allContentViews = [@[] mutableCopy]; [allContentViews removeAllObjects];
 
     //添加内容页
-    if ([self.delegate respondsToSelector:@selector(carouselView:contentViewAtIndex:)]) {//监听代理并回调
-        [contentViews addObject:[self.delegate carouselView:self contentViewAtIndex:previousPageIndex]];
-        [contentViews addObject:[self.delegate carouselView:self contentViewAtIndex:currentPageIndex]];
-        [contentViews addObject:[self.delegate carouselView:self contentViewAtIndex:nextPageIndex]];
-    } else if (self.contentViewBlock) {//监听块并回调
-        [contentViews addObject:self.contentViewBlock(self, previousPageIndex)];
-        [contentViews addObject:self.contentViewBlock(self, currentPageIndex)];
-        [contentViews addObject:self.contentViewBlock(self, nextPageIndex)];
-    }
+    self.delegate ?//监听代理并回调
+    ([allContentViews addObject:[self.delegate carouselView:self contentViewAtIndex:previousPageIndex]],
+     [allContentViews addObject:[self.delegate carouselView:self contentViewAtIndex:currentPageIndex]],
+     [allContentViews addObject:[self.delegate carouselView:self contentViewAtIndex:nextPageIndex]]) :
+    self.contentViewBlock ?//监听块并回调
+    ([allContentViews addObject:self.contentViewBlock(self, previousPageIndex)],
+     [allContentViews addObject:self.contentViewBlock(self, currentPageIndex)],
+     [allContentViews addObject:self.contentViewBlock(self, nextPageIndex)]) :
+    //数组中取值
+    ([allContentViews addObject:_contentViews[previousPageIndex]],
+     [allContentViews addObject:_contentViews[currentPageIndex]],
+     [allContentViews addObject:_contentViews[nextPageIndex]]);
 
     //设置页控制器（白点）
     if ([self.delegate respondsToSelector:@selector(carouselView:pageControl:atIndex:)]) {//监听代理并回调
@@ -286,6 +320,48 @@ typedef void (^tapBlock)(PFCarouselView *, NSInteger);
 
 #pragma mark - Public Methods
 
+//停止滚动
+- (void)stop
+{
+    [animationTimer pauseTimer];
+}
+
+//恢复滚动
+- (void)resume
+{
+    [animationTimer resumeTimer];
+}
+
+//刷新
+- (void)refresh
+{
+    //暂停计时器
+    [animationTimer pauseTimer];
+
+    /*
+     *p.s. 因为滚动视图的滚动数是从0开始，所以当前页为0，其实是第一页
+     */
+    //设置当前页为第一页
+    currentPageIndex = 0;
+
+    //滚动视图
+    if (_scrollView) [_scrollView removeFromSuperview], _scrollView = nil;
+    [self setupScrollView];
+
+    //页控制器（白点）
+    if (_pageControl) pageControlCenter = _pageControl.center, [_pageControl removeFromSuperview], _pageControl = nil;
+    if (_pageControlShow) [self setupPageControlWithCurrentPage:currentPageIndex];
+
+    //文本
+    if (_textLabel) textLabelFrame = _textLabel.frame, [_textLabel removeFromSuperview], _textLabel = nil;
+    if (_textLabelShow) [self setupTextLabel];
+
+    //计时器
+    [self setupAnimationTimerWithDuration:self.animationDuration];
+}
+
+#pragma mark -
+
 //获取页数
 - (void)numberOfPagesInCarouselViewUsingBlock:(NSInteger (^)(PFCarouselView *))block
 {
@@ -305,8 +381,7 @@ typedef void (^tapBlock)(PFCarouselView *, NSInteger);
 {
     if (block) {
         block(self, self.pageControl, currentPageIndex);
-        self.pageControlBlock = block;
-        block = nil;
+        self.pageControlBlock = block, block = nil;
     }
 }
 
@@ -315,8 +390,7 @@ typedef void (^tapBlock)(PFCarouselView *, NSInteger);
 {
     if (block) {
         block(self, self.textLabel, currentPageIndex);
-        self.textLabelBlock = block;
-        block = nil;
+        self.textLabelBlock = block, block = nil;
     }
 }
 
@@ -374,13 +448,11 @@ typedef void (^tapBlock)(PFCarouselView *, NSInteger);
 {
     //获取位移的x坐标
     int contentOffsetX = scrollView.contentOffset.x;
-    if(contentOffsetX >= (2 * CGRectGetWidth(scrollView.frame))) {
-        //翻到下一页
+    if(contentOffsetX >= (2 * CGRectGetWidth(scrollView.frame))) {//翻到下一页
         currentPageIndex = [self getNextPageIndex:currentPageIndex + 1];
         [self setupContentView];
     }
-    if(contentOffsetX <= 0) {
-        //翻到上一页
+    if(contentOffsetX <= 0) {//翻到上一页
         currentPageIndex = [self getNextPageIndex:currentPageIndex - 1];
         [self setupContentView];
     }
@@ -395,23 +467,23 @@ typedef void (^tapBlock)(PFCarouselView *, NSInteger);
 {
 #if __has_feature(objc_arc)
     self.numberOfPagesBlock = nil;
-    self.contentViewBlock = nil;
-    self.pageControlBlock = nil;
-    self.textLabelBlock = nil;
-    self.tapBlock = nil;
+    self.contentViewBlock   = nil;
+    self.pageControlBlock   = nil;
+    self.textLabelBlock     = nil;
+    self.tapBlock           = nil;
 
-    self.delegate = nil;
+    self.delegate           = nil;
 #else
 #endif
 }
 
 /*
-// Only override drawRect: if you perform custom drawing.
-// An empty implementation adversely affects performance during animation.
-- (void)drawRect:(CGRect)rect
-{
-    // Drawing code
-}
-*/
+ // Only override drawRect: if you perform custom drawing.
+ // An empty implementation adversely affects performance during animation.
+ - (void)drawRect:(CGRect)rect
+ {
+ // Drawing code
+ }
+ */
 
 @end
