@@ -63,9 +63,6 @@
 ///文本
 @property (nonatomic, strong, readonly)     UILabel         *textLabel;
 
-///内容视图
-@property (nonatomic, strong)               NSArray         *contentViews;
-
 /**
  *  初始化滚动视图
  *  @param animationDuration: 自动滚动的间隔时长。如果<=0，不自动滚动
