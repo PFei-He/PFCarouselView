@@ -14,10 +14,10 @@
             buildForAnalyzing = "YES">
             <BuildableReference
                BuildableIdentifier = "primary"
-               BlueprintIdentifier = "CEFA8C8819F9F8FB00A7D6DF"
-               BuildableName = "PFCarouselView.app"
-               BlueprintName = "PFCarouselView"
-               ReferencedContainer = "container:PFCarouselView.xcodeproj">
+               BlueprintIdentifier = "CE1B3E4E1A2858F4006DF1B3"
+               BuildableName = "Demo.app"
+               BlueprintName = "Demo"
+               ReferencedContainer = "container:Demo.xcodeproj">
             </BuildableReference>
          </BuildActionEntry>
       </BuildActionEntries>
@@ -32,20 +32,20 @@
             skipped = "NO">
             <BuildableReference
                BuildableIdentifier = "primary"
-               BlueprintIdentifier = "CEFA8CA319F9F8FB00A7D6DF"
-               BuildableName = "PFCarouselViewTests.xctest"
-               BlueprintName = "PFCarouselViewTests"
-               ReferencedContainer = "container:PFCarouselView.xcodeproj">
+               BlueprintIdentifier = "CE1B3E691A2858F4006DF1B3"
+               BuildableName = "DemoTests.xctest"
+               BlueprintName = "DemoTests"
+               ReferencedContainer = "container:Demo.xcodeproj">
             </BuildableReference>
          </TestableReference>
       </Testables>
       <MacroExpansion>
          <BuildableReference
             BuildableIdentifier = "primary"
-            BlueprintIdentifier = "CEFA8C8819F9F8FB00A7D6DF"
-            BuildableName = "PFCarouselView.app"
-            BlueprintName = "PFCarouselView"
-            ReferencedContainer = "container:PFCarouselView.xcodeproj">
+            BlueprintIdentifier = "CE1B3E4E1A2858F4006DF1B3"
+            BuildableName = "Demo.app"
+            BlueprintName = "Demo"
+            ReferencedContainer = "container:Demo.xcodeproj">
          </BuildableReference>
       </MacroExpansion>
    </TestAction>
@@ -61,10 +61,10 @@
       <BuildableProductRunnable>
          <BuildableReference
             BuildableIdentifier = "primary"
-            BlueprintIdentifier = "CEFA8C8819F9F8FB00A7D6DF"
-            BuildableName = "PFCarouselView.app"
-            BlueprintName = "PFCarouselView"
-            ReferencedContainer = "container:PFCarouselView.xcodeproj">
+            BlueprintIdentifier = "CE1B3E4E1A2858F4006DF1B3"
+            BuildableName = "Demo.app"
+            BlueprintName = "Demo"
+            ReferencedContainer = "container:Demo.xcodeproj">
          </BuildableReference>
       </BuildableProductRunnable>
       <AdditionalOptions>
@@ -79,10 +79,10 @@
       <BuildableProductRunnable>
          <BuildableReference
             BuildableIdentifier = "primary"
-            BlueprintIdentifier = "CEFA8C8819F9F8FB00A7D6DF"
-            BuildableName = "PFCarouselView.app"
-            BlueprintName = "PFCarouselView"
-            ReferencedContainer = "container:PFCarouselView.xcodeproj">
+            BlueprintIdentifier = "CE1B3E4E1A2858F4006DF1B3"
+            BuildableName = "Demo.app"
+            BlueprintName = "Demo"
+            ReferencedContainer = "container:Demo.xcodeproj">
          </BuildableReference>
       </BuildableProductRunnable>
    </ProfileAction>

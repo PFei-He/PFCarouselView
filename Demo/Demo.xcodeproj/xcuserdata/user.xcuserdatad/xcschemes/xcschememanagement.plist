@@ -4,7 +4,7 @@
 <dict>
 	<key>SchemeUserState</key>
 	<dict>
-		<key>PFCarouselView.xcscheme</key>
+		<key>Demo.xcscheme</key>
 		<dict>
 			<key>orderHint</key>
 			<integer>0</integer>
@@ -12,12 +12,12 @@
 	</dict>
 	<key>SuppressBuildableAutocreation</key>
 	<dict>
-		<key>CEFA8C8819F9F8FB00A7D6DF</key>
+		<key>CE1B3E4E1A2858F4006DF1B3</key>
 		<dict>
 			<key>primary</key>
 			<true/>
 		</dict>
-		<key>CEFA8CA319F9F8FB00A7D6DF</key>
+		<key>CE1B3E691A2858F4006DF1B3</key>
 		<dict>
 			<key>primary</key>
 			<true/>

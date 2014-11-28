@@ -1,9 +1,9 @@
 //
 //  RootVC.m
-//  PFCarouselView
+//  Demo
 //
-//  Created by PFei_He on 14-10-24.
-//  Copyright (c) 2014年 PFei_He. All rights reserved.
+//  Created by PFei_He on 14-11-28.
+//  Copyright (c) 2014年 PF-Lib. All rights reserved.
 //
 
 #import "RootVC.h"
@@ -26,7 +26,7 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
-
+    
     //视图数组
     viewsArray = [@[] mutableCopy];
 
@@ -47,26 +47,26 @@
     //轮播图的背景
     carouselView.backgroundColor = [[UIColor purpleColor] colorWithAlphaComponent:0.1];
     /*
-    //设置页数
-    [carouselView numberOfPagesInCarouselViewUsingBlock:^NSInteger(PFCarouselView *carouselView){
-        return 5;
-    }];
+     //设置页数
+     [carouselView numberOfPagesInCarouselViewUsingBlock:^NSInteger(PFCarouselView *carouselView){
+     return 5;
+     }];
 
-    //设置视图
-    [carouselView contentViewAtIndexUsingBlock:^UIView *(PFCarouselView *carouselView, NSInteger index) {
-        return viewsArray[index];
-    }];
+     //设置视图
+     [carouselView contentViewAtIndexUsingBlock:^UIView *(PFCarouselView *carouselView, NSInteger index) {
+     return viewsArray[index];
+     }];
 
-    //设置文本
-    [carouselView textLabelAtIndexUsingBlock:^void (PFCarouselView *carouselView, UILabel *textLabel, NSInteger index) {
-        textLabel.text = textArray[index];
-        NSLog(@"%d", index);
-    }];
+     //设置文本
+     [carouselView textLabelAtIndexUsingBlock:^void (PFCarouselView *carouselView, UILabel *textLabel, NSInteger index) {
+     textLabel.text = textArray[index];
+     NSLog(@"%d", index);
+     }];
 
-    //设置点击事件
-    [carouselView didSelectViewAtIndexUsingBlock:^(PFCarouselView *carouselView, NSInteger index) {
-        NSLog(@"点击了第%d个", index);
-    }];
+     //设置点击事件
+     [carouselView didSelectViewAtIndexUsingBlock:^(PFCarouselView *carouselView, NSInteger index) {
+     NSLog(@"点击了第%d个", index);
+     }];
      */
     [self.view addSubview:carouselView];
 }
