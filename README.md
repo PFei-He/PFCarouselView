@@ -2,6 +2,7 @@ PFCarouselView
 ==============
 
 >实现一个简单的图片轮播
+===============
 ![gif](https://github.com/tasselx/PFCarouselView/blob/master/Untitled.gif)
 #Useage
 ``` 
