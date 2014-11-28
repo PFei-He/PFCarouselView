@@ -1,5 +1,5 @@
 //
-//  PFCarouselView.m
+//  PFCarouselView.h
 //  PFCarouselView
 //
 //  Created by PFei_He on 14-10-24.
