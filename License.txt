@@ -1,5 +1,5 @@
 MIT License
-Copyright (c) 2014 PFei_He
+Copyright (c) 2014 PF-Lib
 
 https://github.com/PFei-He/PFCarouselView
 
