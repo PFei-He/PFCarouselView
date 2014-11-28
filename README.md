@@ -26,7 +26,7 @@ carouselView = [[PFCarouselView alloc] initWithFrame:CGRectMake(0, 100, 320, 200
  
 运行效果展示
 --------------
-
+![image](~/Desktop/PFCarouselView.gif)
 
  
 MIT License
