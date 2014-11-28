@@ -7,7 +7,7 @@
 //
 //  https://github.com/PFei-He/PFCarouselView
 //
-//  vesion: v0.4.1
+//  vesion: v1.0.0
 //
 //  Permission is hereby granted, free of charge, to any person obtaining a copy
 //  of this software and associated documentation files (the "Software"), to deal
@@ -73,6 +73,9 @@
 
 @interface PFCarouselView : UIView
 
+///时间间隔
+@property (nonatomic, assign)               NSTimeInterval  duration;
+
 ///是否显示页控制器（白点），默认为显示
 @property (nonatomic, assign)               BOOL            pageControlShow;
 
@@ -96,6 +99,11 @@
  *  @brief 停止滚动
  */
 - (void)stop;
+
+/**
+ *  @brief 暂停滚动
+ */
+- (void)pause;
 
 /**
  *  @brief 恢复滚动
