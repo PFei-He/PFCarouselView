@@ -7,7 +7,7 @@
 //
 //  https://github.com/PFei-He/PFCarouselView
 //
-//  vesion: v0.4.0
+//  vesion: v0.4.1
 //
 //  Permission is hereby granted, free of charge, to any person obtaining a copy
 //  of this software and associated documentation files (the "Software"), to deal
@@ -83,19 +83,10 @@
 
 @end
 
-//获取总页数
 typedef NSInteger (^numberOfPagesBlock)(PFCarouselView *);
-
-//获取内容页
 typedef UIView *(^contentViewBlock)(PFCarouselView *, NSInteger);
-
-//页控制器（白点）
 typedef void (^pageControlBlock)(PFCarouselView *, UIPageControl *, NSInteger);
-
-//文本
 typedef void (^textLabelBlock)(PFCarouselView *, UILabel *, NSInteger);
-
-//点击事件
 typedef void (^tapBlock)(PFCarouselView *, NSInteger);
 
 @interface PFCarouselView () <UIScrollViewDelegate>
@@ -264,8 +255,7 @@ typedef void (^tapBlock)(PFCarouselView *, NSInteger);
 //设置总页数
 - (void)setPagesCount:(NSInteger)count
 {
-    pagesCount = count;
-    if (pagesCount > 0) {
+    if ((pagesCount = count) > 0) {
         [self setupContentView];
         //恢复计时器（指定时间间隔后恢复）
         [animationTimer resumeTimerAfterTimeInterval:_animationDuration];
@@ -278,24 +268,18 @@ typedef void (^tapBlock)(PFCarouselView *, NSInteger);
 //设置滚动视图的数据源
 - (void)setScrollViewDataSource
 {
-    //获取上一页的页数
-    NSInteger previousPage = [self getPage:currentPage - 1];
-
-    //获取下一页的页数
-    NSInteger nextPage = [self getPage:currentPage + 1];
-
     //设置内容页数组
     if (contentViews == nil) contentViews = [@[] mutableCopy]; [contentViews removeAllObjects];
 
     //添加内容页
     self.delegate ?//监听代理并回调
-    ([contentViews addObject:[self.delegate carouselView:self contentViewAtIndex:previousPage]],
+    ([contentViews addObject:[self.delegate carouselView:self contentViewAtIndex:[self getPage:currentPage - 1]]],
      [contentViews addObject:[self.delegate carouselView:self contentViewAtIndex:currentPage]],
-     [contentViews addObject:[self.delegate carouselView:self contentViewAtIndex:nextPage]]) :
+     [contentViews addObject:[self.delegate carouselView:self contentViewAtIndex:[self getPage:currentPage + 1]]]) :
     //监听块并回调
-    ([contentViews addObject:self.contentViewBlock(self, previousPage)],
+    ([contentViews addObject:self.contentViewBlock(self, [self getPage:currentPage - 1])],
      [contentViews addObject:self.contentViewBlock(self, currentPage)],
-     [contentViews addObject:self.contentViewBlock(self, nextPage)]);
+     [contentViews addObject:self.contentViewBlock(self, [self getPage:currentPage + 1])]);
 
     //设置页控制器（白点）
     if ([self.delegate respondsToSelector:@selector(carouselView:pageControl:atIndex:)]) {//监听代理并回调
@@ -387,19 +371,13 @@ typedef void (^tapBlock)(PFCarouselView *, NSInteger);
 //获取页控制器（白点）
 - (void)pageControlAtIndexUsingBlock:(void (^)(PFCarouselView *, UIPageControl *, NSInteger))block
 {
-    if (block) {
-        block(self, _pageControl, currentPage);
-        self.pageControlBlock = block, block = nil;
-    }
+    if (block) (self.pageControlBlock = block)(self, _pageControl, currentPage), block = nil;
 }
 
 //获取文本
 - (void)textLabelAtIndexUsingBlock:(void (^)(PFCarouselView *, UILabel *, NSInteger))block
 {
-    if (block) {
-        block(self, _textLabel, currentPage);
-        self.textLabelBlock = block, block = nil;
-    }
+    if (block) (self.textLabelBlock = block)(self, _textLabel, currentPage), block = nil;
 }
 
 //获取点击事件
@@ -413,11 +391,8 @@ typedef void (^tapBlock)(PFCarouselView *, NSInteger);
 //计时器开始
 - (void)animationTimerDidFired:(NSTimer *)timer
 {
-    //设置位移的数值
-    CGPoint offset = CGPointMake(_scrollView.contentOffset.x + CGRectGetWidth(_scrollView.frame), _scrollView.contentOffset.y);
-
     //设置位移
-    [_scrollView setContentOffset:offset animated:YES];
+    [_scrollView setContentOffset:CGPointMake(_scrollView.contentOffset.x + CGRectGetWidth(_scrollView.frame), _scrollView.contentOffset.y) animated:YES];
 }
 
 //内容页被点击
