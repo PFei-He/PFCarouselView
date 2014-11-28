@@ -1,11 +1,13 @@
 //
-//  PFCarouselView.m
+//  PFCarouselView.h
 //  PFCarouselView
 //
 //  Created by PFei_He on 14-10-24.
 //  Copyright (c) 2014年 PF-Lib. All rights reserved.
 //
 //  https://github.com/PFei-He/PFCarouselView
+//
+//  vesion: v0.3.0
 //
 //  Permission is hereby granted, free of charge, to any person obtaining a copy
 //  of this software and associated documentation files (the "Software"), to deal
