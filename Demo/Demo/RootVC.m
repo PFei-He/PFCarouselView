@@ -48,23 +48,23 @@
     carouselView.backgroundColor = [[UIColor purpleColor] colorWithAlphaComponent:0.1];
     /*
      //设置页数
-     [carouselView numberOfPagesInCarouselViewUsingBlock:^NSInteger(PFCarouselView *carouselView){
+     [carouselView numberOfPagesUsingBlock:^NSInteger(PFCarouselView *carouselView){
      return 5;
      }];
 
      //设置视图
-     [carouselView contentViewAtIndexUsingBlock:^UIView *(PFCarouselView *carouselView, NSInteger index) {
+     [carouselView setupContentViewUsingBlock:^UIView *(PFCarouselView *carouselView, NSInteger index) {
      return viewsArray[index];
      }];
 
      //设置文本
-     [carouselView textLabelAtIndexUsingBlock:^void (PFCarouselView *carouselView, UILabel *textLabel, NSInteger index) {
+     [carouselView resetTextLabelUsingBlock:^void (PFCarouselView *carouselView, UILabel *textLabel, NSInteger index) {
      textLabel.text = textArray[index];
      NSLog(@"%d", index);
      }];
 
      //设置点击事件
-     [carouselView didSelectViewAtIndexUsingBlock:^(PFCarouselView *carouselView, NSInteger index) {
+     [carouselView didSelectViewUsingBlock:^(PFCarouselView *carouselView, NSInteger index) {
      NSLog(@"点击了第%d个", index);
      }];
      */
@@ -80,13 +80,13 @@
 }
 
 //设置视图
-- (UIView *)carouselView:(PFCarouselView *)carouselView contentViewAtIndex:(NSInteger)index
+- (UIView *)carouselView:(PFCarouselView *)carouselView setupContentViewAtIndex:(NSInteger)index
 {
     return viewsArray[index];
 }
 
 //设置文本
-- (void)carouselView:(PFCarouselView *)carouselView textLabel:(UILabel *)textLabel atIndex:(NSInteger)index
+- (void)carouselView:(PFCarouselView *)carouselView resetTextLabel:(UILabel *)textLabel atIndex:(NSInteger)index
 {
     textLabel.text = textArray[index];
 }
