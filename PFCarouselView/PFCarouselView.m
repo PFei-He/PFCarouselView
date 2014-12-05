@@ -159,6 +159,7 @@ typedef void (^tapBlock)(PFCarouselView *, NSInteger);
     _scrollView.delegate = self;
     _scrollView.contentOffset = CGPointMake(CGRectGetWidth(_scrollView.frame), 0);
     _scrollView.pagingEnabled = YES;
+    _scrollView.showsHorizontalScrollIndicator = NO;
     [self addSubview:_scrollView];
 }
 
