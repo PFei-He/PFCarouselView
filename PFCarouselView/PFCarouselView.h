@@ -7,7 +7,7 @@
 //
 //  https://github.com/PFei-He/PFCarouselView
 //
-//  vesion: 0.5.0
+//  vesion: 0.5.1-beta1
 //
 //  Permission is hereby granted, free of charge, to any person obtaining a copy
 //  of this software and associated documentation files (the "Software"), to deal
@@ -29,6 +29,25 @@
 //
 
 #import <UIKit/UIKit.h>
+
+/**
+ *  弱引用`self`。用于解决代码块（block）与强引用self之间的循环引用问题
+ *  调用方式: `@weakify_self`实现弱引用转换，而后使用`weakSelf`代替`self`
+ *
+ *  示例:
+ *  @weakify_self
+ *  [obj block:^{
+ *      weakSelf.property = something;
+ *  }];
+ *
+ */
+#ifndef	weakify_self
+    #if __has_feature(objc_arc)
+        #define weakify_self autoreleasepool{} __weak __typeof__(self) weakSelf = self;
+    #else
+        #define weakify_self autoreleasepool{} __block __typeof__(self) blockSelf = self;
+    #endif
+#endif
 
 @class PFCarouselView;
 
