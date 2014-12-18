@@ -7,7 +7,7 @@
 //
 //  https://github.com/PFei-He/PFCarouselView
 //
-//  vesion: 0.5.1-beta2
+//  vesion: 0.5.1-beta3
 //
 //  Permission is hereby granted, free of charge, to any person obtaining a copy
 //  of this software and associated documentation files (the "Software"), to deal
@@ -46,6 +46,33 @@
         #define weakify_self autoreleasepool{} __weak __typeof__(self) weakSelf = self;
     #else
         #define weakify_self autoreleasepool{} __block __typeof__(self) blockSelf = self;
+    #endif
+#endif
+
+/**
+ *  弱引用`object`。用于解决代码块（block）与强引用对象之间的循环引用问题
+ *  调用方式: `@weakify`实现弱引用转换，`@normalize`把转换后的对象改回原来的对象名
+ *
+ *  示例:
+ *  @weakify(object)
+ *  [obj block:^{
+ *      @normalize(object)
+ *      object = something;
+ *  }];
+ *
+ */
+#ifndef	weakify
+    #if __has_feature(objc_arc)
+        #define weakify(object)	autoreleasepool{} __weak __typeof__(object) __weak_##x##__ = x;
+    #else
+        #define weakify(object)	autoreleasepool{} __block __typeof__(object) __block_##x##__ = x;
+    #endif
+#endif
+#ifndef	normalize
+    #if __has_feature(objc_arc)
+        #define normalize(object) try{} @finally{} __typeof__(object) x = __weak_##x##__;
+    #else
+        #define normalize(object) try{} @finally{} __typeof__(object) x = __block_##x##__;
     #endif
 #endif
 
