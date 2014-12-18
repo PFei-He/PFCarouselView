@@ -7,7 +7,7 @@
 //
 //  https://github.com/PFei-He/PFCarouselView
 //
-//  vesion: 0.5.1-beta1
+//  vesion: 0.5.1-beta2
 //
 //  Permission is hereby granted, free of charge, to any person obtaining a copy
 //  of this software and associated documentation files (the "Software"), to deal
@@ -129,7 +129,7 @@ typedef void (^tapBlock)(PFCarouselView *, NSInteger);
     self = [super initWithFrame:frame];
     if (self) {
         //代理
-        if (delegate) self.delegate = delegate, delegate = nil;
+        if (delegate) self.delegate = delegate;
 
         //滚动视图
         [self setupScrollView];
@@ -217,7 +217,7 @@ typedef void (^tapBlock)(PFCarouselView *, NSInteger);
 
         //添加点击事件
         UITapGestureRecognizer *recognizer = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(tap)];
-        [contentView addGestureRecognizer:recognizer]; recognizer = nil;
+        [contentView addGestureRecognizer:recognizer];
 
         //设置内容尺寸和位移
         CGRect frame = contentView.frame;
@@ -234,14 +234,14 @@ typedef void (^tapBlock)(PFCarouselView *, NSInteger);
 - (void)setPageControlShow:(BOOL)pageControlShow
 {
     _pageControlShow = pageControlShow;
-    if (!pageControlShow) [_pageControl removeFromSuperview], _pageControl = nil;
+    if (!pageControlShow) [self.pageControl removeFromSuperview], self.pageControl = nil;
 }
 
 //是否显示文本的setter方法
 - (void)setTextLabelShow:(BOOL)textLabelShow
 {
     _textLabelShow = textLabelShow;
-    if (!textLabelShow) [_textLabel removeFromSuperview], _textLabel = nil;
+    if (!textLabelShow) [self.textLabel removeFromSuperview], self.textLabel = nil;
 }
 
 #pragma mark - Private Methods
@@ -349,33 +349,33 @@ typedef void (^tapBlock)(PFCarouselView *, NSInteger);
 //获取页数
 - (void)numberOfPagesUsingBlock:(NSInteger (^)(PFCarouselView *))block
 {
-    if (block) self.numberOfPagesBlock = block, block = nil;
+    if (block) self.numberOfPagesBlock = block;
     if (self.contentViewBlock) [self setPagesCount:self.numberOfPagesBlock(self)];
 }
 
 //获取视图
 - (void)setupContentViewUsingBlock:(UIView *(^)(PFCarouselView *, NSInteger))block
 {
-    if (block) self.contentViewBlock = block, block = nil;
+    if (block) self.contentViewBlock = block;
     if (self.numberOfPagesBlock) [self setPagesCount:self.numberOfPagesBlock(self)];
 }
 
 //获取页控制器（白点）
 - (void)resetPageControlUsingBlock:(void (^)(PFCarouselView *, UIPageControl *, NSInteger))block
 {
-    if (block) (self.pageControlBlock = block)(self, _pageControl, currentPage), block = nil;
+    if (block) (self.pageControlBlock = block)(self, _pageControl, currentPage);
 }
 
 //获取文本
 - (void)resetTextLabelUsingBlock:(void (^)(PFCarouselView *, UILabel *, NSInteger))block
 {
-    if (block) (self.textLabelBlock = block)(self, _textLabel, currentPage), block = nil;
+    if (block) (self.textLabelBlock = block)(self, _textLabel, currentPage);
 }
 
 //获取点击事件
 - (void)didSelectViewUsingBlock:(void (^)(PFCarouselView *, NSInteger))block
 {
-    if (block) self.tapBlock = block, block = nil;
+    if (block) self.tapBlock = block;
 }
 
 #pragma mark - Events Management
