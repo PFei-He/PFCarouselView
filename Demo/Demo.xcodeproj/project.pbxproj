@@ -19,8 +19,8 @@
 		CE1B3E6E1A2858F4006DF1B3 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = CE1B3E561A2858F4006DF1B3 /* UIKit.framework */; };
 		CE1B3E761A2858F4006DF1B3 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = CE1B3E741A2858F4006DF1B3 /* InfoPlist.strings */; };
 		CE1B3E781A2858F4006DF1B3 /* DemoTests.m in Sources */ = {isa = PBXBuildFile; fileRef = CE1B3E771A2858F4006DF1B3 /* DemoTests.m */; };
-		CE1B3E831A285911006DF1B3 /* RootVC.m in Sources */ = {isa = PBXBuildFile; fileRef = CE1B3E821A285911006DF1B3 /* RootVC.m */; };
 		CE1B3E8B1A285BD8006DF1B3 /* PFCarouselView.m in Sources */ = {isa = PBXBuildFile; fileRef = CE1B3E8A1A285BD8006DF1B3 /* PFCarouselView.m */; };
+		CE2BECE01A43D9410037E48A /* RootVC.m in Sources */ = {isa = PBXBuildFile; fileRef = CE2BECDF1A43D9410037E48A /* RootVC.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -50,10 +50,10 @@
 		CE1B3E731A2858F4006DF1B3 /* DemoTests-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "DemoTests-Info.plist"; sourceTree = "<group>"; };
 		CE1B3E751A2858F4006DF1B3 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/InfoPlist.strings; sourceTree = "<group>"; };
 		CE1B3E771A2858F4006DF1B3 /* DemoTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = DemoTests.m; sourceTree = "<group>"; };
-		CE1B3E811A285911006DF1B3 /* RootVC.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RootVC.h; sourceTree = "<group>"; };
-		CE1B3E821A285911006DF1B3 /* RootVC.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RootVC.m; sourceTree = "<group>"; };
 		CE1B3E891A285BD8006DF1B3 /* PFCarouselView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PFCarouselView.h; sourceTree = "<group>"; };
 		CE1B3E8A1A285BD8006DF1B3 /* PFCarouselView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PFCarouselView.m; sourceTree = "<group>"; };
+		CE2BECDE1A43D9410037E48A /* RootVC.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RootVC.h; sourceTree = "<group>"; };
+		CE2BECDF1A43D9410037E48A /* RootVC.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RootVC.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -116,8 +116,7 @@
 			children = (
 				CE1B3E611A2858F4006DF1B3 /* AppDelegate.h */,
 				CE1B3E621A2858F4006DF1B3 /* AppDelegate.m */,
-				CE1B3E811A285911006DF1B3 /* RootVC.h */,
-				CE1B3E821A285911006DF1B3 /* RootVC.m */,
+				CE2BECDD1A43D9410037E48A /* Controllers */,
 				CE1B3E641A2858F4006DF1B3 /* Images.xcassets */,
 				CE1B3E591A2858F4006DF1B3 /* Supporting Files */,
 			);
@@ -161,6 +160,15 @@
 			);
 			name = PFCarouselView;
 			path = ../PFCarouselView;
+			sourceTree = "<group>";
+		};
+		CE2BECDD1A43D9410037E48A /* Controllers */ = {
+			isa = PBXGroup;
+			children = (
+				CE2BECDE1A43D9410037E48A /* RootVC.h */,
+				CE2BECDF1A43D9410037E48A /* RootVC.m */,
+			);
+			path = Controllers;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -258,9 +266,9 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				CE1B3E831A285911006DF1B3 /* RootVC.m in Sources */,
 				CE1B3E631A2858F4006DF1B3 /* AppDelegate.m in Sources */,
 				CE1B3E8B1A285BD8006DF1B3 /* PFCarouselView.m in Sources */,
+				CE2BECE01A43D9410037E48A /* RootVC.m in Sources */,
 				CE1B3E5F1A2858F4006DF1B3 /* main.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

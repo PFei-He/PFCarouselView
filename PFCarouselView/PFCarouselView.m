@@ -7,7 +7,7 @@
 //
 //  https://github.com/PFei-He/PFCarouselView
 //
-//  vesion: 0.5.1
+//  vesion: 0.5.2
 //
 //  Permission is hereby granted, free of charge, to any person obtaining a copy
 //  of this software and associated documentation files (the "Software"), to deal
@@ -188,7 +188,7 @@ typedef void (^tapBlock)(PFCarouselView *, NSInteger);
 - (void)setupAnimationTimerWithDuration:(NSTimeInterval)animationDuration
 {
     if (animationDuration > 0.0f) {//设置计时器
-        timer = [NSTimer scheduledTimerWithTimeInterval:animationDuration target:self selector:@selector(animationTimerDidFired) userInfo:nil repeats:YES];
+        if (!timer) timer = [NSTimer scheduledTimerWithTimeInterval:animationDuration target:self selector:@selector(animationTimerDidFired) userInfo:nil repeats:YES];
 
         //获取页数
         self.delegate?//监听代理并回调
@@ -293,8 +293,8 @@ typedef void (^tapBlock)(PFCarouselView *, NSInteger);
 //获取下一页的页数
 - (NSInteger)getPage:(NSInteger)page
 {
-    /*
-     *p.s. 因为滚动视图的滚动数是从0开始，所以滚动数是总数-1
+    /**
+     *  p.s. 因为滚动视图的滚动数是从0开始，所以滚动数是总数-1
      */
     //如果传入的页数为-1，返回总页数-1（当前页为最后一页）
     if (page == -1) return pagesCount - 1;
@@ -331,17 +331,24 @@ typedef void (^tapBlock)(PFCarouselView *, NSInteger);
 //刷新
 - (void)refresh
 {
-    //暂停计时器
-    [timer pause];
+    //删除计时器
+    [timer invalidate], timer = nil;
 
-    /*
-     *p.s. 因为滚动视图的滚动数是从0开始，所以当前页为0，其实是第一页
+    /**
+     *  p.s. 因为滚动视图的滚动数是从0开始，所以当前页为0，其实是第一页
      */
     //设置页控制器（白点）当前页并设置当前页为第一页
     _pageControl.currentPage = (currentPage = 0);
 
     //计时器
     [self setupAnimationTimerWithDuration:_duration];
+}
+
+//移除
+- (void)remove
+{
+    [timer invalidate], timer = nil;
+    [self removeFromSuperview];
 }
 
 #pragma mark -

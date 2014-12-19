@@ -7,7 +7,7 @@
 //
 //  https://github.com/PFei-He/PFCarouselView
 //
-//  vesion: 0.5.1
+//  vesion: 0.5.2
 //
 //  Permission is hereby granted, free of charge, to any person obtaining a copy
 //  of this software and associated documentation files (the "Software"), to deal
@@ -172,6 +172,12 @@
  *  @brief 刷新
  */
 - (void)refresh;
+
+/**
+ *  @brief 移除
+ *  @warning 当离开视图所在的视图控制器时必须要移除，否者会因计时器不能释放而崩溃
+ */
+- (void)remove;
 
 #pragma mark -
 
