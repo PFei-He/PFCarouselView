@@ -7,7 +7,7 @@
 //
 //  https://github.com/PFei-He/PFCarouselView
 //
-//  vesion: 0.5.3-beta2
+//  vesion: 0.5.3-beta3
 //
 //  Permission is hereby granted, free of charge, to any person obtaining a copy
 //  of this software and associated documentation files (the "Software"), to deal
@@ -442,30 +442,5 @@ typedef void (^tapBlock)(PFCarouselView *, NSInteger);
     //设置页控制器（白点）为当前页
     _pageControl.currentPage = currentPage;
 }
-
-#pragma mark - Memory Management
-
-- (void)dealloc
-{
-#if __has_feature(objc_arc)
-    self.numberOfPagesBlock = nil;
-    self.contentViewBlock   = nil;
-    self.pageControlBlock   = nil;
-    self.textLabelBlock     = nil;
-    self.tapBlock           = nil;
-
-    self.delegate           = nil;
-#else
-#endif
-}
-
-/*
-// Only override drawRect: if you perform custom drawing.
-// An empty implementation adversely affects performance during animation.
-- (void)drawRect:(CGRect)rect
-{
-    // Drawing code
-}
-*/
 
 @end
