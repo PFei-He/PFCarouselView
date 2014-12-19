@@ -7,7 +7,7 @@
 //
 //  https://github.com/PFei-He/PFCarouselView
 //
-//  vesion: 0.5.1-beta4
+//  vesion: 0.5.1-beta5
 //
 //  Permission is hereby granted, free of charge, to any person obtaining a copy
 //  of this software and associated documentation files (the "Software"), to deal
@@ -234,14 +234,14 @@ typedef void (^tapBlock)(PFCarouselView *, NSInteger);
 - (void)setPageControlShow:(BOOL)pageControlShow
 {
     _pageControlShow = pageControlShow;
-    if (!pageControlShow) [self.pageControl removeFromSuperview], self.pageControl = nil;
+    if (!pageControlShow) [_pageControl removeFromSuperview], _pageControl = nil;
 }
 
 //是否显示文本的setter方法
 - (void)setTextLabelShow:(BOOL)textLabelShow
 {
     _textLabelShow = textLabelShow;
-    if (!textLabelShow) [self.textLabel removeFromSuperview], self.textLabel = nil;
+    if (!textLabelShow) [_textLabel removeFromSuperview], _textLabel = nil;
 }
 
 #pragma mark - Private Methods
