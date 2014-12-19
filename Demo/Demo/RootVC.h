@@ -13,7 +13,7 @@
 {
     NSMutableArray  *viewsArray;    //视图数组
 
-    NSArray         *textArray;     //文本数组
+    NSArray         *textsArray;    //文本数组
 }
 
 @end

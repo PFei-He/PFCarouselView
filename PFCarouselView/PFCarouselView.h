@@ -7,7 +7,7 @@
 //
 //  https://github.com/PFei-He/PFCarouselView
 //
-//  vesion: 0.5.1-beta5
+//  vesion: 0.5.1
 //
 //  Permission is hereby granted, free of charge, to any person obtaining a copy
 //  of this software and associated documentation files (the "Software"), to deal
@@ -66,25 +66,25 @@
  *  强弱引用转换，用于解决代码块（block）与强引用对象之间的循环引用问题
  *  调用方式: `@weakify(object)`实现弱引用转换，`@strongify(object)`实现强引用转换
  *
- *  示例:
+ *  示例：
  *  @weakify(object)
  *  [obj block:^{
  *      @strongify(object)
- *      object = something;
+ *      strong_object = something;
  *  }];
  */
 #ifndef	weakify
     #if __has_feature(objc_arc)
-        #define weakify(object)	autoreleasepool{} __weak __typeof__(object) __weak_##x##__ = x;
+        #define weakify(object)	autoreleasepool{} __weak __typeof__(object) weak##_##object = object;
     #else
-        #define weakify(object)	autoreleasepool{} __block __typeof__(object) __block_##x##__ = x;
+        #define weakify(object)	autoreleasepool{} __block __typeof__(object) block##_##object = object;
     #endif
 #endif
 #ifndef	strongify
     #if __has_feature(objc_arc)
-        #define strongify(object) try{} @finally{} __typeof__(object) x = __weak_##x##__;
+        #define strongify(object) try{} @finally{} __typeof__(object) strong##_##object = weak##_##object;
     #else
-        #define strongify(object) try{} @finally{} __typeof__(object) x = __block_##x##__;
+        #define strongify(object) try{} @finally{} __typeof__(object) strong##_##object = block##_##object;
     #endif
 #endif
 

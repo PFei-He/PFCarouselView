@@ -32,7 +32,7 @@
 
     //视图背景颜色的数组
     NSArray *colorArray = @[[UIColor cyanColor], [UIColor blueColor], [UIColor greenColor], [UIColor yellowColor], [UIColor purpleColor]];
-    textArray = @[@"0", @"1", @"2", @"3", @"4"];
+    textsArray = @[@"0", @"1", @"2", @"3", @"4"];
 
     //遍历视图
     for (int i = 0; i < colorArray.count; ++i) {
@@ -46,28 +46,33 @@
 
     //轮播图的背景
     carouselView.backgroundColor = [[UIColor purpleColor] colorWithAlphaComponent:0.1];
-    /*
-     //设置页数
-     [carouselView numberOfPagesUsingBlock:^NSInteger(PFCarouselView *carouselView){
-     return 5;
-     }];
+/*
+    //设置页数
+    @weakify(viewsArray)
+    [carouselView numberOfPagesUsingBlock:^NSInteger(PFCarouselView *carouselView){
+        @strongify(viewsArray)
+        return strong_viewsArray.count;
+    }];
 
-     //设置视图
-     [carouselView setupContentViewUsingBlock:^UIView *(PFCarouselView *carouselView, NSInteger index) {
-     return viewsArray[index];
-     }];
+    //设置视图
+    [carouselView setupContentViewUsingBlock:^UIView *(PFCarouselView *carouselView, NSInteger index) {
+        @strongify(viewsArray)
+        return strong_viewsArray[index];
+    }];
 
-     //设置文本
-     [carouselView resetTextLabelUsingBlock:^void (PFCarouselView *carouselView, UILabel *textLabel, NSInteger index) {
-     textLabel.text = textArray[index];
-     NSLog(@"%d", index);
-     }];
+    //设置文本
+    @weakify(textsArray)
+    [carouselView resetTextLabelUsingBlock:^void (PFCarouselView *carouselView, UILabel *textLabel, NSInteger index) {
+        @strongify(textsArray)
+        textLabel.text = strong_textsArray[index];
+        NSLog(@"%d", index);
+    }];
 
-     //设置点击事件
-     [carouselView didSelectViewUsingBlock:^(PFCarouselView *carouselView, NSInteger index) {
-     NSLog(@"点击了第%d个", index);
-     }];
-     */
+    //设置点击事件
+    [carouselView didSelectViewUsingBlock:^(PFCarouselView *carouselView, NSInteger index) {
+        NSLog(@"点击了第%d个", index);
+    }];
+*/
     [self.view addSubview:carouselView];
 }
 
@@ -76,7 +81,7 @@
 //设置页数
 - (NSInteger)numberOfPagesInCarouselView:(PFCarouselView *)automaticScrollView
 {
-    return 5;
+    return viewsArray.count;
 }
 
 //设置视图
@@ -88,7 +93,7 @@
 //设置文本
 - (void)carouselView:(PFCarouselView *)carouselView resetTextLabel:(UILabel *)textLabel atIndex:(NSInteger)index
 {
-    textLabel.text = textArray[index];
+    textLabel.text = textsArray[index];
 }
 
 //设置点击事件
