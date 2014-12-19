@@ -7,7 +7,7 @@
 //
 //  https://github.com/PFei-He/PFCarouselView
 //
-//  vesion: 0.5.3-beta1
+//  vesion: 0.5.3-beta2
 //
 //  Permission is hereby granted, free of charge, to any person obtaining a copy
 //  of this software and associated documentation files (the "Software"), to deal
@@ -333,6 +333,8 @@ typedef void (^tapBlock)(PFCarouselView *, NSInteger);
 {
     //删除计时器
     [timer invalidate], timer = nil;
+
+    stop = NO;
 
     /**
      *  p.s. 因为滚动视图的滚动数是从0开始，所以当前页为0，其实是第一页
