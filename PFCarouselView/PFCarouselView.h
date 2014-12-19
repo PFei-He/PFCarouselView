@@ -7,7 +7,7 @@
 //
 //  https://github.com/PFei-He/PFCarouselView
 //
-//  vesion: 0.5.1-beta3
+//  vesion: 0.5.1-beta4
 //
 //  Permission is hereby granted, free of charge, to any person obtaining a copy
 //  of this software and associated documentation files (the "Software"), to deal
@@ -31,15 +31,21 @@
 #import <UIKit/UIKit.h>
 
 /**
- *  弱引用`self`。用于解决代码块（block）与强引用self之间的循环引用问题
- *  调用方式: `@weakify_self`实现弱引用转换，而后使用`weakSelf`代替`self`
+ *  强弱引用转换，用于解决代码块（block）与强引用self之间的循环引用问题
+ *  调用方式: `@weakify_self`实现弱引用转换，`@strongify_self`实现强引用转换
  *
- *  示例:
+ *  示例一：
  *  @weakify_self
  *  [obj block:^{
  *      weakSelf.property = something;
  *  }];
  *
+ *  示例二（推荐使用，可防止对象被提前释放）：
+ *  @weakify_self
+ *  [obj block:^{
+ *  @strongify_self
+ *      self.property = something;
+ *  }];
  */
 #ifndef	weakify_self
     #if __has_feature(objc_arc)
@@ -48,18 +54,24 @@
         #define weakify_self autoreleasepool{} __block __typeof__(self) blockSelf = self;
     #endif
 #endif
+#ifndef	strongify_self
+    #if __has_feature(objc_arc)
+        #define strongify_self try{} @finally{} __typeof__(weakSelf) self = weakSelf;
+    #else
+        #define strongify_self try{} @finally{} __typeof__(blockSelf) self = blockSelf;
+    #endif
+#endif
 
 /**
- *  弱引用`object`。用于解决代码块（block）与强引用对象之间的循环引用问题
- *  调用方式: `@weakify`实现弱引用转换，`@normalize`把转换后的对象改回原来的对象名
+ *  强弱引用转换，用于解决代码块（block）与强引用对象之间的循环引用问题
+ *  调用方式: `@weakify(object)`实现弱引用转换，`@strongify(object)`实现强引用转换
  *
  *  示例:
  *  @weakify(object)
  *  [obj block:^{
- *      @normalize(object)
+ *      @strongify(object)
  *      object = something;
  *  }];
- *
  */
 #ifndef	weakify
     #if __has_feature(objc_arc)
@@ -68,11 +80,11 @@
         #define weakify(object)	autoreleasepool{} __block __typeof__(object) __block_##x##__ = x;
     #endif
 #endif
-#ifndef	normalize
+#ifndef	strongify
     #if __has_feature(objc_arc)
-        #define normalize(object) try{} @finally{} __typeof__(object) x = __weak_##x##__;
+        #define strongify(object) try{} @finally{} __typeof__(object) x = __weak_##x##__;
     #else
-        #define normalize(object) try{} @finally{} __typeof__(object) x = __block_##x##__;
+        #define strongify(object) try{} @finally{} __typeof__(object) x = __block_##x##__;
     #endif
 #endif
 
