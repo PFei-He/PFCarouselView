@@ -7,7 +7,7 @@
 //
 //  https://github.com/PFei-He/PFCarouselView
 //
-//  vesion: 0.5.3
+//  vesion: 0.6.0-beta1
 //
 //  Permission is hereby granted, free of charge, to any person obtaining a copy
 //  of this software and associated documentation files (the "Software"), to deal
@@ -83,11 +83,11 @@
 
 @end
 
-typedef NSInteger (^numberOfPagesBlock)(PFCarouselView *);
-typedef UIView *(^contentViewBlock)(PFCarouselView *, NSInteger);
-typedef void (^pageControlBlock)(PFCarouselView *, UIPageControl *, NSInteger);
-typedef void (^textLabelBlock)(PFCarouselView *, UILabel *, NSInteger);
-typedef void (^tapBlock)(PFCarouselView *, NSInteger);
+typedef NSInteger (^numberOfPagesBlock)(void);
+typedef UIView *(^contentViewBlock)(NSInteger);
+typedef void (^pageControlBlock)(UIPageControl *, NSInteger);
+typedef void (^textLabelBlock)(UILabel *, NSInteger);
+typedef void (^tapBlock)(NSInteger);
 
 @interface PFCarouselView () <UIScrollViewDelegate>
 {
@@ -194,7 +194,7 @@ typedef void (^tapBlock)(PFCarouselView *, NSInteger);
         self.delegate?//监听代理并回调
         [self setPagesCount:[self.delegate numberOfPagesInCarouselView:self]]:
         self.numberOfPagesBlock?//监听块并回调
-        [self setPagesCount:self.numberOfPagesBlock(self)]:
+        [self setPagesCount:self.numberOfPagesBlock()]:
         //暂停计时器
         [timer pause];
     }
@@ -271,22 +271,22 @@ typedef void (^tapBlock)(PFCarouselView *, NSInteger);
      [contentViews addObject:[self.delegate carouselView:self setupContentViewAtIndex:currentPage]],
      [contentViews addObject:[self.delegate carouselView:self setupContentViewAtIndex:[self getPage:currentPage + 1]]]):
     //监听块并回调
-    ([contentViews addObject:self.contentViewBlock(self, [self getPage:currentPage - 1])],
-     [contentViews addObject:self.contentViewBlock(self, currentPage)],
-     [contentViews addObject:self.contentViewBlock(self, [self getPage:currentPage + 1])]);
+    ([contentViews addObject:self.contentViewBlock([self getPage:currentPage - 1])],
+     [contentViews addObject:self.contentViewBlock(currentPage)],
+     [contentViews addObject:self.contentViewBlock([self getPage:currentPage + 1])]);
 
     //设置页控制器（白点）
     if ([self.delegate respondsToSelector:@selector(carouselView:resetPageControl:atIndex:)]) {//监听代理并回调
         [self.delegate carouselView:self resetPageControl:_pageControl atIndex:currentPage];
     } else if (self.pageControlBlock) {//监听块并回调
-        self.pageControlBlock(self, _pageControl, currentPage);
+        self.pageControlBlock(_pageControl, currentPage);
     }
 
     //设置文本
     if ([self.delegate respondsToSelector:@selector(carouselView:resetTextLabel:atIndex:)]) {//监听代理并回调
         [self.delegate carouselView:self resetTextLabel:_textLabel atIndex:currentPage];
     } else if (self.textLabelBlock) {//监听块并回调
-        self.textLabelBlock(self, _textLabel, currentPage);
+        self.textLabelBlock(_textLabel, currentPage);
     }
 }
 
@@ -356,33 +356,33 @@ typedef void (^tapBlock)(PFCarouselView *, NSInteger);
 #pragma mark -
 
 //获取页数
-- (void)numberOfPagesUsingBlock:(NSInteger (^)(PFCarouselView *))block
+- (void)numberOfPagesUsingBlock:(NSInteger (^)(void))block
 {
     if (block) self.numberOfPagesBlock = block;
-    if (self.contentViewBlock) [self setPagesCount:self.numberOfPagesBlock(self)];
+    if (self.contentViewBlock) [self setPagesCount:self.numberOfPagesBlock()];
 }
 
 //获取视图
-- (void)setupContentViewUsingBlock:(UIView *(^)(PFCarouselView *, NSInteger))block
+- (void)setupContentViewUsingBlock:(UIView *(^)(NSInteger))block
 {
     if (block) self.contentViewBlock = block;
-    if (self.numberOfPagesBlock) [self setPagesCount:self.numberOfPagesBlock(self)];
+    if (self.numberOfPagesBlock) [self setPagesCount:self.numberOfPagesBlock()];
 }
 
 //获取页控制器（白点）
-- (void)resetPageControlUsingBlock:(void (^)(PFCarouselView *, UIPageControl *, NSInteger))block
+- (void)resetPageControlUsingBlock:(void (^)(UIPageControl *, NSInteger))block
 {
-    if (block) (self.pageControlBlock = block)(self, _pageControl, currentPage);
+    if (block) (self.pageControlBlock = block)(_pageControl, currentPage);
 }
 
 //获取文本
-- (void)resetTextLabelUsingBlock:(void (^)(PFCarouselView *, UILabel *, NSInteger))block
+- (void)resetTextLabelUsingBlock:(void (^)(UILabel *, NSInteger))block
 {
-    if (block) (self.textLabelBlock = block)(self, _textLabel, currentPage);
+    if (block) (self.textLabelBlock = block)(_textLabel, currentPage);
 }
 
 //获取点击事件
-- (void)didSelectViewUsingBlock:(void (^)(PFCarouselView *, NSInteger))block
+- (void)didSelectViewUsingBlock:(void (^)(NSInteger))block
 {
     if (block) self.tapBlock = block;
 }
@@ -402,7 +402,7 @@ typedef void (^tapBlock)(PFCarouselView *, NSInteger);
     if ([self.delegate respondsToSelector:@selector(carouselView:didSelectViewAtIndex:)]) {//监听代理并回调
         [self.delegate carouselView:self didSelectViewAtIndex:currentPage];
     } else if (self.tapBlock) {//监听块并回调
-        self.tapBlock(self, currentPage);
+        self.tapBlock(currentPage);
     }
 }
 

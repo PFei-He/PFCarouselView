@@ -49,27 +49,27 @@
 /*
     //设置页数
     @weakify(viewsArray)
-    [carouselView numberOfPagesUsingBlock:^NSInteger(PFCarouselView *carouselView){
+    [carouselView numberOfPagesUsingBlock:^NSInteger{
         @strongify(viewsArray)
         return strong_viewsArray.count;
     }];
 
     //设置视图
-    [carouselView setupContentViewUsingBlock:^UIView *(PFCarouselView *carouselView, NSInteger index) {
+    [carouselView setupContentViewUsingBlock:^UIView *(NSInteger index) {
         @strongify(viewsArray)
         return strong_viewsArray[index];
     }];
 
     //设置文本
     @weakify(textsArray)
-    [carouselView resetTextLabelUsingBlock:^void (PFCarouselView *carouselView, UILabel *textLabel, NSInteger index) {
+    [carouselView resetTextLabelUsingBlock:^(UILabel *textLabel, NSInteger index) {
         @strongify(textsArray)
         textLabel.text = strong_textsArray[index];
         NSLog(@"%d", index);
     }];
 
     //设置点击事件
-    [carouselView didSelectViewUsingBlock:^(PFCarouselView *carouselView, NSInteger index) {
+    [carouselView didSelectViewUsingBlock:^(NSInteger index) {
         NSLog(@"点击了第%d个", index);
     }];
 */
