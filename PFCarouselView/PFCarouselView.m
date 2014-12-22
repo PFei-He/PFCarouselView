@@ -7,7 +7,7 @@
 //
 //  https://github.com/PFei-He/PFCarouselView
 //
-//  vesion: 0.6.0-beta3
+//  vesion: 0.6.0-beta4
 //
 //  Permission is hereby granted, free of charge, to any person obtaining a copy
 //  of this software and associated documentation files (the "Software"), to deal
@@ -95,8 +95,6 @@ typedef void (^tapBlock)(NSInteger);
     NSInteger       pagesCount;         //总页数
     NSMutableArray  *contentViews;      //内容视图
     NSTimer         *timer;             //动画计时器
-
-    BOOL            stop;               //是否停止滚动
 }
 
 ///滚动视图
