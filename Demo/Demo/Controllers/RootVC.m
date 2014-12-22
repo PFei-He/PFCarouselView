@@ -48,23 +48,18 @@
     carouselView.backgroundColor = [[UIColor purpleColor] colorWithAlphaComponent:0.1];
 /*
     //设置页数
-    @weakify(viewsArray)
     [carouselView numberOfPagesUsingBlock:^NSInteger{
-        @strongify(viewsArray)
-        return strong_viewsArray.count;
+        return viewsArray.count;
     }];
 
     //设置视图
     [carouselView setupContentViewUsingBlock:^UIView *(NSInteger index) {
-        @strongify(viewsArray)
-        return strong_viewsArray[index];
+        return viewsArray[index];
     }];
 
     //设置文本
-    @weakify(textsArray)
     [carouselView resetTextLabelUsingBlock:^(UILabel *textLabel, NSInteger index) {
-        @strongify(textsArray)
-        textLabel.text = strong_textsArray[index];
+        textLabel.text = textsArray[index];
         NSLog(@"%d", index);
     }];
 
@@ -79,7 +74,7 @@
 #pragma mark - PFCarouselViewDelegate
 
 //设置页数
-- (NSInteger)numberOfPagesInCarouselView:(PFCarouselView *)automaticScrollView
+- (NSInteger)numberOfPagesInCarouselView:(PFCarouselView *)carouselView
 {
     return viewsArray.count;
 }
