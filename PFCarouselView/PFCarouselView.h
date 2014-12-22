@@ -7,7 +7,7 @@
 //
 //  https://github.com/PFei-He/PFCarouselView
 //
-//  vesion: 0.6.0-beta1
+//  vesion: 0.6.0-beta2
 //
 //  Permission is hereby granted, free of charge, to any person obtaining a copy
 //  of this software and associated documentation files (the "Software"), to deal
@@ -34,13 +34,7 @@
  *  强弱引用转换，用于解决代码块（block）与强引用self之间的循环引用问题
  *  调用方式: `@weakify_self`实现弱引用转换，`@strongify_self`实现强引用转换
  *
- *  示例一：
- *  @weakify_self
- *  [obj block:^{
- *      weakSelf.property = something;
- *  }];
- *
- *  示例二（推荐使用，可防止对象被提前释放）：
+ *  示例：
  *  @weakify_self
  *  [obj block:^{
  *  @strongify_self
@@ -131,9 +125,6 @@
 
 @interface PFCarouselView : UIView
 
-///时间间隔
-@property (nonatomic, assign)               NSTimeInterval  duration;
-
 ///是否显示页控制器（白点），默认为显示
 @property (nonatomic, assign)               BOOL            pageControlShow;
 
@@ -155,26 +146,31 @@
 
 /**
  *  @brief 停止滚动
+ *  @detail 永远停止滚动
  */
 - (void)stop;
 
 /**
  *  @brief 暂停滚动
+ *  @detail 手动翻页后滚动自动恢复
  */
 - (void)pause;
 
 /**
  *  @brief 恢复滚动
+ *  @detail 初始化定义的时间后恢复
  */
 - (void)resume;
 
 /**
  *  @brief 刷新
+ *  @detail 视图回滚到第一页
  */
 - (void)refresh;
 
 /**
  *  @brief 移除
+ *  @detail 建议使用于视图控制器类的`- (void)viewWillDisappear:(BOOL)animated{}`或`- (void)viewDidDisappear:(BOOL)animated{}`
  *  @warning 当离开视图所在的视图控制器时必须要移除，否者会造成内存无法释放
  */
 - (void)remove;

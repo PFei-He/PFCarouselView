@@ -7,7 +7,7 @@
 //
 //  https://github.com/PFei-He/PFCarouselView
 //
-//  vesion: 0.6.0-beta1
+//  vesion: 0.6.0-beta2
 //
 //  Permission is hereby granted, free of charge, to any person obtaining a copy
 //  of this software and associated documentation files (the "Software"), to deal
@@ -102,6 +102,9 @@ typedef void (^tapBlock)(NSInteger);
 ///滚动视图
 @property (nonatomic, strong)   UIScrollView                *scrollView;
 
+///时间间隔
+@property (nonatomic, assign)   NSTimeInterval              duration;
+
 ///获取页数
 @property (nonatomic, copy)     numberOfPagesBlock          numberOfPagesBlock;
 
@@ -190,13 +193,7 @@ typedef void (^tapBlock)(NSInteger);
     if (animationDuration > 0.0f) {//设置计时器
         if (!timer) timer = [NSTimer scheduledTimerWithTimeInterval:animationDuration target:self selector:@selector(animationTimerDidFired) userInfo:nil repeats:YES];
 
-        //获取页数
-        self.delegate?//监听代理并回调
-        [self setPagesCount:[self.delegate numberOfPagesInCarouselView:self]]:
-        self.numberOfPagesBlock?//监听块并回调
-        [self setPagesCount:self.numberOfPagesBlock()]:
-        //暂停计时器
-        [timer pause];
+        [self start];
     }
 }
 
@@ -226,6 +223,18 @@ typedef void (^tapBlock)(NSInteger);
         [_scrollView addSubview:contentView];
     }
     [_scrollView setContentOffset:CGPointMake(CGRectGetWidth(_scrollView.frame), 0)];
+}
+
+//开始滚动
+- (void)start
+{
+    //获取页数
+    self.delegate?//监听代理并回调
+    [self setPagesCount:[self.delegate numberOfPagesInCarouselView:self]]:
+    self.numberOfPagesBlock?//监听块并回调
+    [self setPagesCount:self.numberOfPagesBlock()]:
+    //暂停计时器
+    [timer pause];
 }
 
 #pragma mark - Property Methods
@@ -309,41 +318,34 @@ typedef void (^tapBlock)(NSInteger);
 //停止滚动
 - (void)stop
 {
-    stop = YES;
-    [timer pause];
+    [timer invalidate], timer = nil;
 }
 
 //暂停滚动
 - (void)pause
 {
-    stop = NO;
     [timer pause];
 }
 
 //恢复滚动
 - (void)resume
 {
-    stop = NO;
-    _scrollView.contentOffset = CGPointMake(CGRectGetWidth(_scrollView.frame), 0);
-    [timer resume];
+    timer?
+    [timer resumeAfterTimeInterval:_duration]:
+    [self setupAnimationTimerWithDuration:_duration];
 }
 
 //刷新
 - (void)refresh
 {
-    //删除计时器
-    [timer invalidate], timer = nil;
-
-    stop = NO;
-
     /**
      *  p.s. 因为滚动视图的滚动数是从0开始，所以当前页为0，其实是第一页
      */
     //设置页控制器（白点）当前页并设置当前页为第一页
     _pageControl.currentPage = (currentPage = 0);
 
-    //计时器
-    [self setupAnimationTimerWithDuration:_duration];
+    //开始滚动
+    [self start];
 }
 
 //移除
@@ -418,7 +420,7 @@ typedef void (^tapBlock)(NSInteger);
 - (void)scrollViewDidEndDragging:(UIScrollView *)scrollView willDecelerate:(BOOL)decelerate
 {
     //恢复计时器（指定时间间隔后恢复）
-    if (!stop) [timer resumeAfterTimeInterval:_duration];
+    [timer resumeAfterTimeInterval:_duration];
 }
 
 //停止减速
