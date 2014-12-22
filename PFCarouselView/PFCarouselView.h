@@ -7,7 +7,7 @@
 //
 //  https://github.com/PFei-He/PFCarouselView
 //
-//  vesion: 0.6.0-beta2
+//  vesion: 0.6.0-beta3
 //
 //  Permission is hereby granted, free of charge, to any person obtaining a copy
 //  of this software and associated documentation files (the "Software"), to deal
@@ -181,7 +181,7 @@
  *  @brief 滚动视图总页数（使用块方法时必须执行该方法）
  *  @return 总页数
  */
-- (void)numberOfPagesUsingBlock:(NSInteger (^)(void))block;
+- (void)numberOfPagesUsingBlock:(NSInteger(^)(void))block;
 
 /**
  *  @brief 添加内容视图（使用块方法时必须执行该方法）
@@ -195,19 +195,19 @@
  *  @param pageControl: 页控制器（白点）
  *  @param index: 页控制器（白点）序号
  */
-- (void)resetPageControlUsingBlock:(void (^)(UIPageControl *pageControl, NSInteger index))block;
+- (void)resetPageControlUsingBlock:(void(^)(UIPageControl *pageControl, NSInteger index))block;
 
 /**
  *  @brief 设置文本
  *  @param textLabel: 文本
  *  @param index: 文本序号
  */
-- (void)resetTextLabelUsingBlock:(void (^)(UILabel *textLabel, NSInteger index))block;
+- (void)resetTextLabelUsingBlock:(void(^)(UILabel *textLabel, NSInteger index))block;
 
 /**
  *  @brief 实现点击事件
  *  @param index: 点击事件序号
  */
-- (void)didSelectViewUsingBlock:(void (^)(NSInteger index))block;
+- (void)didSelectViewUsingBlock:(void(^)(NSInteger index))block;
 
 @end
