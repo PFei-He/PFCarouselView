@@ -42,8 +42,14 @@
     }
 
     //创建一个轮播图
-    PFCarouselView *carouselView = [[PFCarouselView alloc] initWithFrame:CGRectMake(0, 100, 320, 200) animationDuration:2 delegate:self];
-
+    PFCarouselView *carouselView = [[PFCarouselView alloc] initWithFrame:CGRectMake(0, 100, 320, 200)];
+    
+    //设置时间间隔
+    carouselView.duration = 2.0f;
+    
+    //设置代理
+    carouselView.delegate = self;
+    
     //轮播图的背景
     carouselView.backgroundColor = [[UIColor purpleColor] colorWithAlphaComponent:0.1];
 /*
@@ -51,7 +57,7 @@
     [carouselView numberOfPagesUsingBlock:^NSInteger{
         return viewsArray.count;
     }];
-
+    
     //设置视图
     [carouselView setupContentViewUsingBlock:^UIView *(NSInteger index) {
         return viewsArray[index];
@@ -60,7 +66,6 @@
     //设置文本
     [carouselView resetTextLabelUsingBlock:^(UILabel *textLabel, NSInteger index) {
         textLabel.text = textsArray[index];
-        NSLog(@"%d", index);
     }];
 
     //设置点击事件
@@ -68,6 +73,9 @@
         NSLog(@"点击了第%d个", index);
     }];
 */
+    //开始滚动
+    [carouselView resume];
+    
     [self.view addSubview:carouselView];
 }
 

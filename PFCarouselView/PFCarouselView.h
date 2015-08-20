@@ -7,7 +7,7 @@
 //
 //  https://github.com/PFei-He/PFCarouselView
 //
-//  vesion: 0.6.0-beta4
+//  vesion: 0.6.0-beta5
 //
 //  Permission is hereby granted, free of charge, to any person obtaining a copy
 //  of this software and associated documentation files (the "Software"), to deal
@@ -126,23 +126,22 @@
 @interface PFCarouselView : UIView
 
 ///是否显示页控制器（白点），默认为显示
-@property (nonatomic, assign)               BOOL            pageControlShow;
+@property (nonatomic, assign)               BOOL                        pageControlShow;
 
 ///页控制器（白点）
-@property (nonatomic, strong, readonly)     UIPageControl   *pageControl;
+@property (nonatomic, strong, readonly)     UIPageControl               *pageControl;
 
 ///是否显示文本，默认为显示
-@property (nonatomic, assign)               BOOL            textLabelShow;
+@property (nonatomic, assign)               BOOL                        textLabelShow;
 
 ///文本
-@property (nonatomic, strong, readonly)     UILabel         *textLabel;
+@property (nonatomic, strong, readonly)     UILabel                     *textLabel;
 
-/**
- *  初始化滚动视图
- *  @param animationDuration: 自动滚动的间隔时长。如果<=0，不自动滚动
- *  @param delegate: 代理（不使用代理方法时设为nil）
- */
-- (id)initWithFrame:(CGRect)frame animationDuration:(NSTimeInterval)animationDuration delegate:(id<PFCarouselViewDelegate>)delegate;
+///时间间隔
+@property (nonatomic, assign)               NSTimeInterval              duration;
+
+///代理
+@property (nonatomic, weak)                 id<PFCarouselViewDelegate>  delegate;
 
 /**
  *  @brief 停止滚动
