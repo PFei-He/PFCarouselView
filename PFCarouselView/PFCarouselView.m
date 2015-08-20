@@ -7,7 +7,7 @@
 //
 //  https://github.com/PFei-He/PFCarouselView
 //
-//  vesion: 0.6.0-beta5
+//  vesion: 0.6.0-beta6
 //
 //  Permission is hereby granted, free of charge, to any person obtaining a copy
 //  of this software and associated documentation files (the "Software"), to deal
@@ -335,33 +335,33 @@ typedef void (^tapBlock)(NSInteger);
 //获取页数
 - (void)numberOfPagesUsingBlock:(NSInteger(^)(void))block
 {
-    if (block) self.numberOfPagesBlock = block;
+    self.numberOfPagesBlock = block;
     if (self.contentViewBlock) [self setPagesCount:self.numberOfPagesBlock()];
 }
 
 //获取视图
 - (void)setupContentViewUsingBlock:(UIView *(^)(NSInteger))block
 {
-    if (block) self.contentViewBlock = block;
+    self.contentViewBlock = block;
     if (self.numberOfPagesBlock) [self setPagesCount:self.numberOfPagesBlock()];
 }
 
 //获取页控制器（白点）
 - (void)resetPageControlUsingBlock:(void(^)(UIPageControl *, NSInteger))block
 {
-    if (block) (self.pageControlBlock = block)(_pageControl, currentPage);
+    (self.pageControlBlock = block)(_pageControl, currentPage);
 }
 
 //获取文本
 - (void)resetTextLabelUsingBlock:(void(^)(UILabel *, NSInteger))block
 {
-    if (block) (self.textLabelBlock = block)(_textLabel, currentPage);
+    (self.textLabelBlock = block)(_textLabel, currentPage);
 }
 
 //获取点击事件
 - (void)didSelectViewUsingBlock:(void(^)(NSInteger))block
 {
-    if (block) self.tapBlock = block;
+    self.tapBlock = block;
 }
 
 #pragma mark - Events Management
