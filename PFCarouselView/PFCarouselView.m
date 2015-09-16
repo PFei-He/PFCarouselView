@@ -7,7 +7,7 @@
 //
 //  https://github.com/PFei-He/PFCarouselView
 //
-//  vesion: 0.6.0
+//  vesion: 0.7.0-beta
 //
 //  Permission is hereby granted, free of charge, to any person obtaining a copy
 //  of this software and associated documentation files (the "Software"), to deal
@@ -258,20 +258,9 @@ typedef void (^tapBlock)(NSInteger);
     ([contentViews addObject:self.contentViewBlock([self getPage:currentPage - 1])],
      [contentViews addObject:self.contentViewBlock(currentPage)],
      [contentViews addObject:self.contentViewBlock([self getPage:currentPage + 1])]);
-
-    //设置页控制器（白点）
-    if ([self.delegate respondsToSelector:@selector(carouselView:resetPageControl:atIndex:)]) {
-        [self.delegate carouselView:self resetPageControl:_pageControl atIndex:currentPage];
-    } else if (self.pageControlBlock) {
-        self.pageControlBlock(_pageControl, currentPage);
-    }
-
-    //设置文本
-    if ([self.delegate respondsToSelector:@selector(carouselView:resetTextLabel:atIndex:)]) {
-        [self.delegate carouselView:self resetTextLabel:_textLabel atIndex:currentPage];
-    } else if (self.textLabelBlock) {
-        self.textLabelBlock(_textLabel, currentPage);
-    }
+    
+    kCALLBACK3(carouselView:, self, resetPageControl:, _pageControl, atIndex:, currentPage, self.pageControlBlock)
+    kCALLBACK3(carouselView:, self, resetTextLabel:, _textLabel, atIndex:, currentPage, self.textLabelBlock)
 }
 
 //获取下一页的页数
@@ -332,37 +321,11 @@ typedef void (^tapBlock)(NSInteger);
 
 #pragma mark -
 
-//获取页数
-- (void)numberOfPagesUsingBlock:(NSInteger(^)(void))block
-{
-    self.numberOfPagesBlock = block;
-    if (self.contentViewBlock) [self setPagesCount:self.numberOfPagesBlock()];
-}
-
-//获取视图
-- (void)setupContentViewUsingBlock:(UIView *(^)(NSInteger))block
-{
-    self.contentViewBlock = block;
-    if (self.numberOfPagesBlock) [self setPagesCount:self.numberOfPagesBlock()];
-}
-
-//获取页控制器（白点）
-- (void)resetPageControlUsingBlock:(void(^)(UIPageControl *, NSInteger))block
-{
-    (self.pageControlBlock = block)(_pageControl, currentPage);
-}
-
-//获取文本
-- (void)resetTextLabelUsingBlock:(void(^)(UILabel *, NSInteger))block
-{
-    (self.textLabelBlock = block)(_textLabel, currentPage);
-}
-
-//获取点击事件
-- (void)didSelectViewUsingBlock:(void(^)(NSInteger))block
-{
-    self.tapBlock = block;
-}
+kBLOCK1(numberOfPages, NSInteger, void, self.numberOfPagesBlock, if (self.contentViewBlock) [self setPagesCount:self.numberOfPagesBlock()])
+kBLOCK1(setupContentView, UIView *, NSInteger, self.contentViewBlock, if (self.numberOfPagesBlock) [self setPagesCount:self.numberOfPagesBlock()])
+kBLOCK1(didSelectView, void, NSInteger, self.tapBlock, nil)
+kBLOCK2(resetPageControl, void, UIPageControl *, NSInteger, self.pageControlBlock, nil)
+kBLOCK2(resetTextLabel, void, UILabel *, NSInteger, self.textLabelBlock, nil)
 
 #pragma mark - Events Management
 
@@ -376,11 +339,7 @@ typedef void (^tapBlock)(NSInteger);
 //内容页被点击
 - (void)tap
 {
-    if ([self.delegate respondsToSelector:@selector(carouselView:didSelectViewAtIndex:)]) {
-        [self.delegate carouselView:self didSelectViewAtIndex:currentPage];
-    } else if (self.tapBlock) {
-        self.tapBlock(currentPage);
-    }
+    kCALLBACK2(carouselView:, self, didSelectViewAtIndex:, currentPage, self.tapBlock)
 }
 
 #pragma mark - UIScrollViewDelegate
