@@ -119,24 +119,35 @@ typedef void (^tapBlock)(NSInteger);
 
 @implementation PFCarouselView
 
-- (id)initWithFrame:(CGRect)frame
-{
+- (id)initWithFrame:(CGRect)frame {
     self = [super initWithFrame:frame];
     if (self) {
-        [self setupScrollView];     //滚动视图
-        [self setupPageControl];    //页控制器（白点）
-        [self setupTextLabel];      //文本
+        [self setup];
+    }
+    return self;
+}
+
+- (id)initWithCoder:(NSCoder *)aDecoder {
+    self = [super initWithCoder:aDecoder];
+    if (self) {
+        [self setup];
     }
     return self;
 }
 
 #pragma mark - Views Management
 
+- (void)setup {
+    [self setupScrollView];     //滚动视图
+    [self setupPageControl];    //页控制器（白点）
+    [self setupTextLabel];      //文本
+}
+
 //设置滚动视图
 - (void)setupScrollView
 {
     if (!_scrollView) _scrollView = [[UIScrollView alloc] initWithFrame:self.bounds];
-    _scrollView.autoresizingMask = 0xFF;
+    _scrollView.autoresizingMask = UIViewAutoresizingFlexibleHeight | UIViewAutoresizingFlexibleWidth;
     _scrollView.contentMode = UIViewContentModeCenter;
     _scrollView.contentSize = CGSizeMake(3 * CGRectGetWidth(_scrollView.frame), CGRectGetHeight(_scrollView.frame));
     _scrollView.delegate = self;
@@ -150,6 +161,7 @@ typedef void (^tapBlock)(NSInteger);
 - (void)setupPageControl
 {
     if (!_pageControl) _pageControl = [[UIPageControl alloc] init];
+    _pageControl.autoresizingMask = UIViewAutoresizingFlexibleLeftMargin | UIViewAutoresizingFlexibleRightMargin | UIViewAutoresizingFlexibleTopMargin;
     _pageControl.center = CGPointMake(_scrollView.center.x, _scrollView.bounds.size.height - 40);
     [self addSubview:_pageControl];
 }
@@ -158,7 +170,8 @@ typedef void (^tapBlock)(NSInteger);
 - (void)setupTextLabel
 {
     if (!_textLabel) _textLabel = [[UILabel alloc] initWithFrame:CGRectMake(self.bounds.origin.x, self.bounds.size.height - 30, self.bounds.size.width, 30)];
-    _textLabel.backgroundColor = [UIColor colorWithRed:0 green:0 blue:0 alpha:0.300];
+    _textLabel.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleTopMargin;
+    _textLabel.backgroundColor = [UIColor colorWithWhite:0 alpha:0.3];
     _textLabel.font = [UIFont systemFontOfSize:14];
     _textLabel.textColor = [UIColor whiteColor];
     _textLabel.textAlignment = NSTextAlignmentCenter;
