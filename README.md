@@ -28,14 +28,14 @@ carouselView = [[PFCarouselView alloc] initWithFrame:CGRectMake(0, 100, 320, 200
 ```
 //设置页数
 [carouselView numberOfPagesInCarouselViewUsingBlock:^NSInteger(PFCarouselView *carouselView){
-return viewsArray.count;
+    return viewsArray.count;
 }];
 ```
 
 ```
 //设置视图
 [carouselView contentViewAtIndexUsingBlock:^UIView *(PFCarouselView *carouselView, NSInteger index) {
-return viewsArray[index];
+    return viewsArray[index];
 }];
 ```
 
