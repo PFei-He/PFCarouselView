@@ -1,29 +1,48 @@
-PFCarouselView
-==============
+[PFCarouselView](https://github.com/PFei-He/PFCarouselView)
+===
 
-实现图片轮播功能
+[![License MIT](https://img.shields.io/badge/license-MIT-green.svg)](https://raw.githubusercontent.com/PFei-He/PFCarouselView/master/LICENSE)
+[![Support](https://img.shields.io/badge/support-iOS%206%2B%20-blue.svg?style=flat)](https://www.apple.com/nl/ios/)
+[![Cocoapods Compatible](https://img.shields.io/cocoapods/v/PFCarouselView.svg)](https://img.shields.io/cocoapods/v/PFCarouselView.svg)
 
-说明
--------------
+PFCarouselView 是一款简单接入便可实现新闻客户端轮播图的开源库。
 
-PFCarouselView 是一款简单接入便可实现新闻客户端轮播图的开源库。开发者可使用代理或代码块的方式来对轮播图进行设置。本库具备扩展性好，使用简单，后期容易维护的特点。
+版本
+---
+0.7.0
+
+CocoaPods
+---
+```
+platform:ios, '6.0'
+pod 'PFCarouselView', '~> 0.7'
+```
 
 代码展示
---------------
+---
+```
+//创建一个轮播图
+carouselView = [[PFCarouselView alloc] initWithFrame:CGRectMake(0, 100, 320, 200) animationDuration:2 delegate:nil];
+```
 
-//创建一个轮播图<br>
-carouselView = [[PFCarouselView alloc] initWithFrame:CGRectMake(0, 100, 320, 200) animationDuration:2 delegate:self];<br>
-
-//设置页数<br>
+```
+//设置页数
 [carouselView numberOfPagesInCarouselViewUsingBlock:^NSInteger(PFCarouselView *carouselView){
-    return viewsArray.count;
-}];<br>
+return viewsArray.count;
+}];
+```
 
-//设置视图<br>
+```
+//设置视图
 [carouselView contentViewAtIndexUsingBlock:^UIView *(PFCarouselView *carouselView, NSInteger index) {
-    return viewsArray[index];
- }];<br>
- 
+return viewsArray[index];
+}];
+```
+
 运行效果展示
 --------------
 ![image](https://github.com/PFei-He/PFCarouselView/blob/master/PFCarouselView.gif)
+
+许可证
+---
+`PFCarouselView`使用 MIT 许可证，详情见 [LICENSE](https://raw.githubusercontent.com/PFei-He/PFCarouselView/master/LICENSE) 文件。

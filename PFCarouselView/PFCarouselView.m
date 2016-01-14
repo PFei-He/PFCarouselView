@@ -7,7 +7,7 @@
 //
 //  https://github.com/PFei-He/PFCarouselView
 //
-//  vesion: 0.7.0-beta
+//  vesion: 0.7.0
 //
 //  Permission is hereby granted, free of charge, to any person obtaining a copy
 //  of this software and associated documentation files (the "Software"), to deal
@@ -119,25 +119,29 @@ typedef void (^tapBlock)(NSInteger);
 
 @implementation PFCarouselView
 
-- (id)initWithFrame:(CGRect)frame {
+- (id)initWithFrame:(CGRect)frame
+{
     self = [super initWithFrame:frame];
     if (self) {
-        [self setup];
+        [self setupViews];
     }
     return self;
 }
 
-- (id)initWithCoder:(NSCoder *)aDecoder {
+- (id)initWithCoder:(NSCoder *)aDecoder
+{
     self = [super initWithCoder:aDecoder];
     if (self) {
-        [self setup];
+        [self setupViews];
     }
     return self;
 }
 
 #pragma mark - Views Management
 
-- (void)setup {
+//设置视图
+- (void)setupViews
+{
     [self setupScrollView];     //滚动视图
     [self setupPageControl];    //页控制器（白点）
     [self setupTextLabel];      //文本
