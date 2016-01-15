@@ -244,6 +244,7 @@ typedef void (^tapBlock)(NSInteger);
 {
     _textLabelShow = textLabelShow;
     if (!textLabelShow) [_textLabel removeFromSuperview], _textLabel = nil;
+    _pageControl.center = CGPointMake(_scrollView.center.x, _scrollView.bounds.size.height - (textLabelShow ? 40 : 10));
 }
 
 #pragma mark - Private Methods
