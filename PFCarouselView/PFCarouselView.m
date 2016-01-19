@@ -118,10 +118,10 @@ typedef void (^tapBlock)(NSInteger);
 
 @interface PFCarouselView () <UIScrollViewDelegate>
 {
-    NSInteger       currentPage;        //当前页的序号
-    NSInteger       pagesCount;         //总页数
-    NSMutableArray  *contentViews;      //内容视图
-    NSTimer         *timer;             //动画计时器
+    NSInteger               currentPage;        //当前页的序号
+    NSInteger               pagesCount;         //总页数
+    NSMutableOrderedSet     *contentViews;      //内容视图
+    NSTimer                 *timer;             //动画计时器
 }
 
 ///滚动视图
@@ -180,11 +180,14 @@ typedef void (^tapBlock)(NSInteger);
 {
     if (!_scrollView) _scrollView = [[UIScrollView alloc] initWithFrame:self.bounds];
     _scrollView.contentMode = UIViewContentModeCenter;
-    _scrollView.contentSize = CGSizeMake(3 * CGRectGetWidth(_scrollView.frame), CGRectGetHeight(_scrollView.frame));
+    _scrollView.contentSize = CGSizeMake(((pagesCount > 2) ? 3 : pagesCount) * CGRectGetWidth(_scrollView.frame), CGRectGetHeight(_scrollView.frame));
     _scrollView.delegate = self;
-    _scrollView.contentOffset = CGPointMake(CGRectGetWidth(_scrollView.frame), 0);
+    _scrollView.contentOffset = CGPointMake((pagesCount > 2) ? CGRectGetWidth(_scrollView.frame) : 0, 0);
     _scrollView.pagingEnabled = YES;
     _scrollView.showsHorizontalScrollIndicator = NO;
+    if (pagesCount <= 2) {
+        _scrollView.alwaysBounceHorizontal = YES;
+    }
     [self addSubview:_scrollView];
 }
 
@@ -260,7 +263,7 @@ typedef void (^tapBlock)(NSInteger);
         contentView.frame = frame;
         [_scrollView addSubview:contentView];
     }
-    [_scrollView setContentOffset:CGPointMake(CGRectGetWidth(_scrollView.frame), 0)];
+    [_scrollView setContentOffset:(pagesCount > 2) ? CGPointMake(CGRectGetWidth(_scrollView.frame), 0) : _scrollView.contentOffset];
 }
 
 //开始滚动
@@ -317,13 +320,15 @@ typedef void (^tapBlock)(NSInteger);
 
     //设置页控制器（白点）的总数
     _pageControl.numberOfPages = count;
+    
+    _scrollView.contentSize = CGSizeMake(((pagesCount > 2) ? 3 : pagesCount) * CGRectGetWidth(_scrollView.frame), CGRectGetHeight(_scrollView.frame));
 }
 
 //设置滚动视图的数据源
 - (void)setScrollViewDataSource
 {
     //设置内容页数组
-    if (contentViews == nil) contentViews = [@[] mutableCopy]; [contentViews removeAllObjects];
+    if (contentViews == nil) contentViews = [NSMutableOrderedSet new]; [contentViews removeAllObjects];
 
     //添加内容页
     self.delegate?
@@ -407,6 +412,9 @@ kBLOCK2(resetTextLabel, void, UILabel *, NSInteger, self.textLabelBlock, nil)
 //计时器开始
 - (void)animationTimerDidFired
 {
+    if (pagesCount <= 2) {
+        return;
+    }
     //设置位移
     [_scrollView setContentOffset:CGPointMake(_scrollView.contentOffset.x + CGRectGetWidth(_scrollView.frame), 0) animated:YES];
 }
@@ -435,19 +443,26 @@ kBLOCK2(resetTextLabel, void, UILabel *, NSInteger, self.textLabelBlock, nil)
 //停止减速
 - (void)scrollViewDidEndDecelerating:(UIScrollView *)scrollView
 {
+    if (pagesCount <= 2) {
+        return;
+    }
     [scrollView setContentOffset:CGPointMake(CGRectGetWidth(scrollView.frame), 0) animated:YES];
 }
 
 //滚动
 - (void)scrollViewDidScroll:(UIScrollView *)scrollView
 {
-    if(scrollView.contentOffset.x >= (2 * CGRectGetWidth(scrollView.frame))) {//翻到下一页
-        currentPage = [self getPage:currentPage + 1];
-        [self setupContentView];
-    }
-    if(scrollView.contentOffset.x <= 0) {//翻到上一页
-        currentPage = [self getPage:currentPage - 1];
-        [self setupContentView];
+    if (pagesCount > 2) {
+        if(scrollView.contentOffset.x >= (2 * CGRectGetWidth(scrollView.frame))) {//翻到下一页
+            currentPage = [self getPage:currentPage + 1];
+            [self setupContentView];
+        }
+        if(scrollView.contentOffset.x <= 0) {//翻到上一页
+            currentPage = [self getPage:currentPage - 1];
+            [self setupContentView];
+        }
+    } else {
+        currentPage = scrollView.contentOffset.x / CGRectGetWidth(scrollView.frame);
     }
 
     //设置页控制器（白点）为当前页
