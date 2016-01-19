@@ -86,6 +86,12 @@
 ///文本
 @property (nonatomic, strong, readonly)     UILabel                     *textLabel;
 
+///文本内容
+@property (nonatomic, strong)               NSString                    *textString;
+
+///文本边距
+@property (nonatomic, assign)               UIEdgeInsets                textInsets;
+
 ///时间间隔
 @property (nonatomic, assign)               NSTimeInterval              duration;
 
