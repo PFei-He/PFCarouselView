@@ -332,10 +332,10 @@ typedef void (^tapBlock)(NSInteger);
 
     //添加内容页
     self.delegate?
-    ([contentViews addObject:[self.delegate carouselView:self setupContentViewAtIndex:[self getPage:currentPage - 1]]],
+    ((pagesCount > 2 ) ? [contentViews addObject:[self.delegate carouselView:self setupContentViewAtIndex:[self getPage:currentPage - 1]]] : nil,
      [contentViews addObject:[self.delegate carouselView:self setupContentViewAtIndex:currentPage]],
      [contentViews addObject:[self.delegate carouselView:self setupContentViewAtIndex:[self getPage:currentPage + 1]]]):
-    ([contentViews addObject:self.contentViewBlock([self getPage:currentPage - 1])],
+    ((pagesCount > 2 ) ? [contentViews addObject:self.contentViewBlock([self getPage:currentPage - 1])] : nil,
      [contentViews addObject:self.contentViewBlock(currentPage)],
      [contentViews addObject:self.contentViewBlock([self getPage:currentPage + 1])]);
     
