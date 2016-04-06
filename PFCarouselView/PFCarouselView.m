@@ -263,7 +263,7 @@ typedef void (^tapBlock)(NSInteger);
         contentView.frame = frame;
         [_scrollView addSubview:contentView];
     }
-    [_scrollView setContentOffset:(pagesCount > 2) ? CGPointMake(CGRectGetWidth(_scrollView.frame), 0) : _scrollView.contentOffset];
+    [_scrollView setContentOffset:(pagesCount > 2) ? CGPointMake(CGRectGetWidth(_scrollView.frame), 0) : CGPointZero];
 }
 
 //开始滚动
