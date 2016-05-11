@@ -7,8 +7,6 @@
 //
 //  https://github.com/PFei-He/PFCarouselView
 //
-//  vesion: 0.7.0
-//
 //  Permission is hereby granted, free of charge, to any person obtaining a copy
 //  of this software and associated documentation files (the "Software"), to deal
 //  in the Software without restriction, including without limitation the rights
@@ -128,6 +126,14 @@
  *  @warning 当离开视图所在的视图控制器时必须要移除，否者会造成内存无法释放
  */
 - (void)remove;
+
+/**
+ *  @brief 版本号
+ *  @note 无
+ *  @param 无
+ *  @return 版本号
+ */
+- (NSString *)version;
 
 #pragma mark -
 
