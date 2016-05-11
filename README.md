@@ -15,7 +15,7 @@ PFCarouselView is easy to create a carousel view for news app.
 CocoaPods
 ---
 ```
-target 'YouTarget' do
+target 'YourTarget' do
     platform:ios, '6.0'
     pod 'PFCarouselView', '~> 0.7'
 end
