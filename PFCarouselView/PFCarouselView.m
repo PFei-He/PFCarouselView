@@ -261,7 +261,7 @@ typedef void (^tapBlock)(NSInteger);
         contentView.frame = frame;
         [_scrollView addSubview:contentView];
     }
-    [_scrollView setContentOffset:(pagesCount > 2) ? CGPointMake(CGRectGetWidth(_scrollView.frame), 0) : _scrollView.contentOffset];
+    [_scrollView setContentOffset:(pagesCount > 2) ? CGPointMake(CGRectGetWidth(_scrollView.frame), 0) : CGPointZero];
 }
 
 //开始滚动
@@ -330,10 +330,10 @@ typedef void (^tapBlock)(NSInteger);
 
     //添加内容页
     self.delegate?
-    ([contentViews addObject:[self.delegate carouselView:self setupContentViewAtIndex:[self getPage:currentPage - 1]]],
+    ((pagesCount > 2 ) ? [contentViews addObject:[self.delegate carouselView:self setupContentViewAtIndex:[self getPage:currentPage - 1]]] : nil,
      [contentViews addObject:[self.delegate carouselView:self setupContentViewAtIndex:currentPage]],
      [contentViews addObject:[self.delegate carouselView:self setupContentViewAtIndex:[self getPage:currentPage + 1]]]):
-    ([contentViews addObject:self.contentViewBlock([self getPage:currentPage - 1])],
+    ((pagesCount > 2 ) ? [contentViews addObject:self.contentViewBlock([self getPage:currentPage - 1])] : nil,
      [contentViews addObject:self.contentViewBlock(currentPage)],
      [contentViews addObject:self.contentViewBlock([self getPage:currentPage + 1])]);
     
