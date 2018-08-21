@@ -1,6 +1,6 @@
 Pod::Spec.new do |s|
   s.name         = "PFCarouselView"
-  s.version      = "0.7.1"
+  s.version      = "0.8.0"
   s.summary      = "Easy to create a carousel view for news app."
   s.homepage     = "https://github.com/PFei-He/PFCarouselView"
   s.license      = "MIT"

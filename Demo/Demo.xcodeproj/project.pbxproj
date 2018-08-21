@@ -34,7 +34,6 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
-		459B9D8A1CE31A7C001FCFFA /* PFConfigure.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PFConfigure.h; sourceTree = "<group>"; };
 		CE1B3E4F1A2858F4006DF1B3 /* Demo.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Demo.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		CE1B3E521A2858F4006DF1B3 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
 		CE1B3E541A2858F4006DF1B3 /* CoreGraphics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreGraphics.framework; path = System/Library/Frameworks/CoreGraphics.framework; sourceTree = SDKROOT; };
@@ -158,7 +157,6 @@
 			children = (
 				CE1B3E891A285BD8006DF1B3 /* PFCarouselView.h */,
 				CE1B3E8A1A285BD8006DF1B3 /* PFCarouselView.m */,
-				459B9D8A1CE31A7C001FCFFA /* PFConfigure.h */,
 			);
 			name = PFCarouselView;
 			path = ../PFCarouselView;
